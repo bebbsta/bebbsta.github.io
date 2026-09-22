@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Perculator v0.7.4 User Guide — Slowfield Audio</title>
+<meta name="description" content="Perculator v0.7.4 beta user guide.">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f1e7;color:#173740;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}a{text-decoration:none;color:inherit}
+.wrap{max-width:1100px;margin:auto;padding:0 28px}header{position:sticky;top:0;background:rgba(245,241,231,.96);backdrop-filter:blur(14px);border-bottom:1px solid #dacdb6;z-index:10}
+.nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{font-size:15px;font-weight:850;letter-spacing:.18em;text-transform:lowercase;color:#111}.links{display:flex;gap:18px;font-size:14px}
+.hero{padding:60px 0 34px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.25em;color:#7b827c;font-weight:800}h1{font-size:clamp(48px,7vw,86px);line-height:.9;letter-spacing:-.045em;margin:14px 0;color:#0a4d69}
+.lede{max-width:780px;color:#5c7074;font-size:18px;line-height:1.7}.notice{margin-top:20px;padding:15px 17px;border-radius:14px;background:#fff7e9;border:1px solid #ead5ad;color:#725f43;font-size:13px;line-height:1.6}
+.section{padding:48px 0;border-top:1px solid #e2d7c4}.section h2{font-size:34px;margin:0 0 18px;color:#173d47}.section h3{font-size:20px;margin:0 0 7px;color:#173d47}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.card{background:#fff;border:1px solid #dbceb7;border-radius:18px;padding:22px}.card p{margin:0;color:#60757a;line-height:1.65}
+.steps{display:grid;gap:14px}.step{display:grid;grid-template-columns:46px 1fr;gap:16px;align-items:start}.num{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#0a4d69;color:white;font-weight:800}
+.recipe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.recipe{background:#fffaf1;border:1px solid #dfd0b7;border-radius:16px;padding:18px}.recipe b{display:block;margin-bottom:5px}.recipe span{font-size:13px;color:#66797d;line-height:1.5}
+footer{padding:30px 0 44px;border-top:1px solid #d9ccb6;color:#6a7d81;font-size:13px}
+.btn{display:inline-flex;padding:11px 16px;border-radius:999px;border:1px solid #1a596d;font-weight:750;margin-top:20px}.btn.primary{background:#0a4d69;color:white}
+@media(max-width:760px){.grid,.recipe-grid{grid-template-columns:1fr}.nav{flex-direction:column;align-items:flex-start;padding:14px 0}}
+</style><!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ER0KL3CQ2Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ER0KL3CQ2Q');
+</script>
+
+</head><body>
+<header><div class="wrap nav"><a class="brand" href="https://slowfieldaudio.com/">slowfield audio</a><div class="links"><a href="../perculator_beta_product_page/index.html">← Perculator</a><a href="../plugins.html">Plugins</a><a href="https://slowfieldaudio.com/">Main site</a></div></div></header>
+<main>
+<section class="hero"><div class="wrap"><div class="eyebrow">Slowfield Audio · Beta documentation</div><h1>Perculator v0.7.4</h1><p class="lede">Rhythmic Effects Brewer user guide. Perculator is designed to turn a drum or percussion loop into a playable rhythmic variation quickly, while still giving you deeper control over step actions, transient detection, re-sequencing and export.</p><div class="notice"><strong>Beta software:</strong> save important projects before testing. Behaviour can still change as the sequencing and export workflow are refined.</div><a class="btn primary" href="../perculator_beta_product_page/index.html">Back to Perculator</a></div></section>
+
+<section class="section"><div class="wrap"><h2>Quick Start</h2><div class="steps">
+<div class="step"><div class="num">1</div><div><h3>Insert Perculator</h3><p>Place it on a stereo drum or percussion track and start playback.</p></div></div>
+<div class="step"><div class="num">2</div><div><h3>Choose First Brew</h3><p>Use the factory recipe selector as a balanced starting point.</p></div></div>
+<div class="step"><div class="num">3</div><div><h3>Raise PERCOLATE</h3><p>Increase the master transformation amount until the rhythm starts to move.</p></div></div>
+<div class="step"><div class="num">4</div><div><h3>Set SENSITIVITY</h3><p>Adjust transient detection if effects trigger too often or miss important hits.</p></div></div>
+<div class="step"><div class="num">5</div><div><h3>Shape the feel</h3><p>Use Groove, Space, Echo, Motion, Chaos and Swing to steer the treatment.</p></div></div>
+<div class="step"><div class="num">6</div><div><h3>Blend and level</h3><p>Use Mix for parallel-style blending and Output for final level matching.</p></div></div>
+</div></div></section>
+
+<section class="section"><div class="wrap"><h2>Creative Actions</h2><div class="grid">
+<div class="card"><h3>ROLL</h3><p>Creates a fresh snare-roll style treatment. Repeated presses are allowed; a new partial capture replaces the previous one.</p></div>
+<div class="card"><h3>SHUFFLE</h3><p>Keeps the loop audio intact while redistributing the current 16 effect assignments to different slices. Repeated presses create new variations.</p></div>
+<div class="card"><h3>FLIP</h3><p>Maps every step to its musical opposite: Dry/Both, Echo/Gate, Space/Crush, Scatter/Filter and Reverse/Stutter. Press again to restore the exact starting pattern.</p></div>
+<div class="card"><h3>RECYCLE</h3><p>Captures a clean bar, detects transient roles, rearranges the event order and auditions a newly reconstructed beat. Each press starts again from the protected clean source.</p></div>
+</div></div></section>
+
+<section class="section"><div class="wrap"><h2>16-Step Sequencer</h2><div class="grid">
+<div class="card"><h3>Step actions</h3><p>Dry, Echo, Space, Both, Scatter, Reverse, Stutter, Crush, Filter and Gate.</p></div>
+<div class="card"><h3>Editing a step</h3><p>Click a sequencer disc to cycle through the ten actions. The current action abbreviation is shown inside the step.</p></div>
+<div class="card"><h3>Depth + Chance</h3><p>The slim bar below each step controls both effect intensity and the probability that the step fires. Drag horizontally to edit; double-click resets to 100%.</p></div>
+<div class="card"><h3>PREVIOUS</h3><p>Recalls the complete state before the latest Roll, Shuffle, Flip or ReCycle. Press again to swap back for quick A/B comparison.</p></div>
+</div></div></section>
+
+<section class="section"><div class="wrap"><h2>Main Controls + XY Live</h2><div class="grid">
+<div class="card"><h3>PERCOLATE</h3><p>Master transformation amount.</p></div><div class="card"><h3>GROOVE</h3><p>Strengthens rhythmic accent and pocket.</p></div>
+<div class="card"><h3>SPACE</h3><p>Controls ambience and room-like spatial treatment.</p></div><div class="card"><h3>ECHO</h3><p>Controls tempo-derived delay treatment.</p></div>
+<div class="card"><h3>MOTION</h3><p>Adds evolving movement and modulation.</p></div><div class="card"><h3>CHAOS</h3><p>Increases controlled variation and unpredictability.</p></div>
+<div class="card"><h3>SWING</h3><p>Introduces alternating-step timing delay.</p></div><div class="card"><h3>SENSITIVITY</h3><p>Sets transient-detection responsiveness.</p></div>
+<div class="card"><h3>MIX + OUTPUT</h3><p>Mix blends processed and dry signal. Output sets final level with soft protection.</p></div><div class="card"><h3>XY LIVE</h3><p>Horizontal movement blends Space toward Echo; vertical movement increases Motion/Chaos intensity. Parameters are host-automatable; double-click returns the pad to centre.</p></div>
+</div></div></section>
+
+<section class="section"><div class="wrap"><h2>ReCycle, ReSeq and WAV Export</h2><div class="steps">
+<div class="step"><div class="num">1</div><div><p>Press RECYCLE. Capture begins when step 1 next arrives and records one clean 16-step source bar.</p></div></div>
+<div class="step"><div class="num">2</div><div><p>Transient analysis identifies likely kick, backbeat, hat and ghost-note events.</p></div></div>
+<div class="step"><div class="num">3</div><div><p>Perculator reconstructs the event order using the current recipe's groove blueprint and short equal-power crossfades.</p></div></div>
+<div class="step"><div class="num">4</div><div><p>At the next bar boundary, the exact recycled result is auditioned in sync with the DAW.</p></div></div>
+<div class="step"><div class="num">5</div><div><p>Drag the RECYCLED LOOP.WAV tile directly into Ableton, or click it to save a permanent WAV file.</p></div></div>
+<div class="step"><div class="num">6</div><div><p>Press RECYCLE again for a genuinely new variation; the clean captured source is protected from generational degradation.</p></div></div>
+</div>
+<div class="grid" style="margin-top:22px"><div class="card"><h3>17 ReSeq recipes</h3><p>The ReSeq bank performs explicit beat reconstruction rather than simply changing effects. Examples include Kick Exchange, Backbeat Switch, Hat Migration, Broken Barline, Half-Time Scaffold, Broken Funk, Triplet Mirage and Alternate Universe.</p></div><div class="card"><h3>Loudness + rendering</h3><p>Recipe changes use restrained loudness matching. ReCycle output applies DC removal, RMS control, peak protection and fresh effect buffers before export.</p></div></div>
+</div></section>
+
+<section class="section"><div class="wrap"><h2>Recipe Guide + Troubleshooting</h2><div class="recipe-grid">
+<div class="recipe"><b>First Brew</b><span>Balanced.</span></div><div class="recipe"><b>Pocket Cutter</b><span>Tight and rhythmic.</span></div><div class="recipe"><b>Dub Chamber</b><span>Spacious.</span></div>
+<div class="recipe"><b>BoC Drizzle</b><span>Soft, weathered movement.</span></div><div class="recipe"><b>Probability Rain</b><span>Irregular detail.</span></div><div class="recipe"><b>Final Pour</b><span>Broad full-spectrum transformation.</span></div>
+<div class="recipe"><b>Kick Exchange</b><span>Recognisable roles with structural change.</span></div><div class="recipe"><b>Backbeat Switch</b><span>Reworks the backbeat position.</span></div><div class="recipe"><b>Alternate Universe</b><span>The most radical role reassignment.</span></div>
+</div>
+<div class="grid" style="margin-top:22px"><div class="card"><h3>Saving your own setup</h3><p>Use SAVE and LOAD beside the recipe selector. User presets are stored as portable .perculator files. Host automation and complete session-state recall are supported.</p></div><div class="card"><h3>Troubleshooting</h3><p>Lower Percolate, Chaos or Depth + Chance if effects are too busy. Raise Sensitivity if hits are missed. Keep the DAW transport running if ReCycle is waiting. Perculator 0.7.4 is designed so Shuffle, Flip and ReCycle can simply be pressed again for another operation.</p></div></div>
+</div></section>
+</main>
+<footer><div class="wrap">Slowfield Audio · Perculator v0.7.4 beta user guide · hello@slowfieldaudio.com</div></footer>
+
+<script>
+(function () {
+  function pluginFromUrl(url) {
+    const u = (url || '').toLowerCase();
+    if (u.includes('minimusmaximus')) return 'MinimusMaximus';
+    if (u.includes('stillroom')) return 'Stillroom';
+    if (u.includes('the-sandwich') || u.includes('sandwich')) return 'The Sandwich';
+    if (u.includes('strange-studies') || u.includes('strange_studies') || u.includes('strangestudies')) return 'Strange Studies';
+    if (u.includes('traces')) return 'Traces';
+    if (u.includes('perculator')) return 'Perculator';
+    return 'Unknown';
+  }
+
+  function platformFromUrl(url) {
+    const u = (url || '').toLowerCase();
+    if (u.endsWith('.pkg') || u.endsWith('.dmg') || u.includes('macos') || u.includes('-mac')) return 'macOS';
+    if (u.endsWith('.exe') || u.includes('windows') || u.includes('-win')) return 'Windows';
+    return 'Other';
+  }
+
+  document.addEventListener('click', function (e) {
+    const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+
+    const href = a.href || '';
+    const clean = href.split('?')[0].toLowerCase();
+    if (!/\.(pkg|exe|dmg|zip)$/.test(clean)) return;
+
+    if (typeof window.gtag === 'function') {
+      const fileName = clean.split('/').pop() || '';
+      window.gtag('event', 'beta_download', {
+        plugin_name: pluginFromUrl(href + ' ' + location.pathname),
+        download_platform: platformFromUrl(href),
+        file_name: fileName,
+        link_url: href,
+        page_path: location.pathname,
+        transport_type: 'beacon'
+      });
+    }
+  }, true);
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MinimusMaximus Beta — Slowfield Audio</title>
+<meta name="description" content="MinimusMaximus by Slowfield Audio — a creative multi-effect built around Character, Focus and one large Effort macro.">
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1380px;margin:auto;padding:0 30px}
+header{position:sticky;top:0;z-index:20;backdrop-filter:blur(16px)}
+.nav{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{font-size:18px;letter-spacing:.18em}
+.navlinks{display:flex;gap:28px;align-items:center;font-size:14px}
+.hero{padding:54px 0 36px}
+.hero-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:38px;align-items:center}
+.eyebrow{font-size:12px;letter-spacing:.29em;text-transform:uppercase;font-weight:750}
+h1{font-size:clamp(58px,7vw,104px);line-height:.9;font-weight:520;letter-spacing:-.045em;margin:20px 0 16px}
+h1 span{color:#ef982c}
+.tag{font-size:22px;letter-spacing:.06em;margin-bottom:22px}
+.lede{font-size:18px;line-height:1.68;max-width:650px}
+.actions{display:flex;gap:13px;flex-wrap:wrap;margin-top:28px}
+.btn{padding:14px 20px;border-radius:13px;font-weight:780}
+.beta-warning{margin-top:22px;border-radius:16px;padding:16px 18px;max-width:680px}
+.beta-warning strong{display:block;margin-bottom:4px}
+.beta-warning span{font-size:13px;line-height:1.5}
+.compat{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px;font-size:12px}
+.hero-art{border-radius:28px;padding:14px}
+.hero-art img{display:block;width:100%;border-radius:20px;object-fit:contain}
+.feature-shell{padding:14px 0 0}
+.features{border-radius:24px;display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden}
+.feature{padding:28px 24px;text-align:center}
+.feature .symbol{font-size:30px;line-height:1;margin-bottom:12px}
+.feature b{display:block;font-size:15px;margin-bottom:7px}
+.feature span{font-size:14px;line-height:1.5}
+.section{padding:72px 0}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:30px}
+.section h2{font-size:45px;line-height:1.03;font-weight:520;margin:8px 0 0}
+.section-head p{max-width:650px;line-height:1.65}
+.product-block{display:grid;grid-template-columns:1.25fr .75fr;gap:34px;align-items:center}
+.screen{border-radius:22px;padding:12px}
+.screen img{display:block;width:100%;border-radius:13px;object-fit:contain}
+.copy{border-radius:22px;padding:30px}
+.copy h3{font-size:36px;line-height:1.08;margin:0 0 14px;font-weight:520}
+.copy p{line-height:1.68}
+.list{display:grid;gap:13px;margin-top:22px}
+.item{padding-top:14px}
+.item strong{display:block;margin-bottom:4px}
+.item span{font-size:14px;line-height:1.55}
+.beta{display:grid;grid-template-columns:1.2fr .8fr;gap:28px}
+.panel{border-radius:22px;padding:31px}
+.panel h3{font-size:34px;margin:0 0 14px;font-weight:520}
+.panel p{line-height:1.67}
+.feedback-list{display:grid;gap:12px;margin-top:18px}
+.feedback-list div{padding-top:13px}
+.feedback-list b{display:block;margin-bottom:4px}
+footer{padding:30px 0 44px}
+.platform-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px}
+.platform-badge{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:11px;border:1px solid currentColor;font-size:12px;font-weight:800;letter-spacing:.02em;background:rgba(255,255,255,.04)}
+.platform-badge .apple-mark{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:20px;line-height:1;transform:translateY(-1px)}
+.platform-badge .au-mark{display:inline-grid;place-items:center;min-width:28px;height:22px;padding:0 5px;border:1.5px solid currentColor;border-radius:6px;font-size:11px;letter-spacing:.08em;font-weight:900}
+.platform-badge .windows-mark{display:grid;grid-template-columns:repeat(2,8px);grid-template-rows:repeat(2,8px);gap:2px;width:18px;height:18px}
+.platform-badge .windows-mark i{display:block;background:currentColor}
+.platform-badge .vst-mark{display:inline-grid;place-items:center;min-width:38px;height:22px;padding:0 6px;border:1.5px solid currentColor;border-radius:6px;font-size:10px;letter-spacing:.08em;font-weight:900}
+.windows-warning{margin-top:16px;padding:14px 16px;border-radius:14px;font-size:12px;line-height:1.55}
+.windows-warning strong{display:block;margin-bottom:4px}
+.plugins-return{display:inline-flex;align-items:center;min-height:44px;padding:10px 18px;border:1px solid currentColor;border-radius:999px;color:inherit;text-decoration:none;font-size:14px;font-weight:600;line-height:1.4}
+.plugins-return-row{padding-top:24px;padding-bottom:8px}
+
+:root{--bg:#0b1f20;--paper:#10292a;--ink:#f4f0e6;--muted:#a7b9b7;--line:#345153;--dark:#ef982c;--soft:#193536;--shadow:0 18px 55px rgba(0,0,0,.22)}
+body{background:var(--bg);color:var(--ink)}
+header{background:rgba(11,31,32,.94);border-bottom:1px solid var(--line)}
+.navlinks a{color:#bac7c5}
+.hero{background:linear-gradient(180deg,#0d2526 0%,#0b1f20 100%)}
+.eyebrow{color:#9ab0ad}
+.lede,.section-head p,.copy p,.panel p,.item span,.feature span{color:var(--muted)}
+.btn{border:1px solid #486466;background:#10292a}
+.btn.primary{background:var(--dark);border-color:var(--dark);color:#1e160d}
+.beta-warning{background:#2b2519;border:1px solid #675636}
+.beta-warning span{color:#d4c39f}
+.compat{color:var(--muted)} .compat strong{color:var(--ink)}
+.hero-art{background:#10292a;border:1px solid var(--line);box-shadow:var(--shadow)}
+.features{background:#10292a;border:1px solid var(--line);box-shadow:0 10px 40px rgba(0,0,0,.14)}
+.feature{border-right:1px solid var(--line)} .feature:last-child{border-right:0}
+.screen{background:#061516;box-shadow:var(--shadow)}
+.copy,.panel{background:#10292a;border:1px solid var(--line)}
+.item,.feedback-list div{border-top:1px solid #294344}
+.windows-warning{border:1px solid rgba(228,170,69,.45);background:rgba(228,170,69,.08)}
+footer{border-top:1px solid var(--line);color:#819895}
+.brand-logo{font-size:15px;letter-spacing:.22em;text-transform:lowercase;color:#efe7d6}
+.footer-logo{font-size:14px;letter-spacing:.18em;text-transform:lowercase;margin-bottom:12px}
+
+@media(max-width:940px){
+ .nav{flex-direction:column;align-items:flex-start;padding:14px 0}
+ .hero-grid,.product-block,.beta{grid-template-columns:1fr}
+ .features{grid-template-columns:1fr 1fr}
+}
+</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ER0KL3CQ2Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ER0KL3CQ2Q');
+</script>
+
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand-logo" href="https://slowfieldaudio.com/">slowfield audio</a>
+    <nav class="navlinks">
+      <a href="https://slowfieldaudio.com/">← main site</a>
+      <a href="../plugins.html">plugins</a>
+      <a href="https://slowfieldaudio.com/#about">about</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap plugins-return-row"><a class="plugins-return" href="../plugins.html">← Return to Plugins</a></div>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">slowfield audio / beta 2.12.7</div>
+      <h1>Minimus<span>Maximus</span></h1>
+      <div class="tag">minimum effort. maximum movement.</div>
+      <p class="lede">Choose a Character and Focus, then move the sound with one large Effort macro. MinimusMaximus keeps the surface immediate while Rev Grain, Glitch, Micro Loop, RANDOM and FLIP open the door to stranger movement.</p>
+
+      <div class="beta-warning"><strong>Beta software — currently macOS + Windows.</strong><span>Try MinimusMaximus 2.12.7 on Mac or Windows and help refine the musical response. This is unfinished beta software: save a copy of important projects and send us any repeatable issues.</span></div>
+
+      <div class="actions">
+        <a class="btn primary" download href="../downloads/minimusmaximus/MinimusMaximus-2.12.7-macOS.pkg">↓ download Mac beta</a>
+        <a class="btn" download href="../downloads/minimusmaximus/MinimusMaximus-2.12.7-Windows-Setup.exe">↓ download Windows beta</a>
+        <a class="btn" href="../downloads/minimusmaximus/MinimusMaximus-v2.12.7-User-Guide.pdf">user guide</a>
+        <a class="btn" href="mailto:hello@slowfieldaudio.com?subject=MinimusMaximus%20Beta%20Feedback">send feedback</a>
+      </div>
+
+      <div class="compat"><strong>macOS + Windows</strong><span>|</span><strong>Mac: AU / VST3 · Windows: VST3 (64-bit)</strong><span>|</span>standalone included</div>
+
+      <div aria-label="Platform and plug-in format" class="platform-row">
+        <span class="platform-badge"><span class="apple-mark"></span><span>macOS</span></span>
+        <span class="platform-badge"><span class="au-mark">AU</span><span>Audio Units · Mac</span></span>
+        <span class="platform-badge"><span class="windows-mark"><i></i><i></i><i></i><i></i></span><span>Windows · 64-bit</span></span>
+        <span class="platform-badge"><span class="vst-mark">VST3</span><span>VST</span></span>
+      </div>
+
+      <div class="windows-warning"><strong>Mac beta notice</strong>macOS Gatekeeper may warn that the developer cannot be verified or that Apple cannot check this beta installer for malicious software. Download only from Slowfield Audio and continue only if you trust the file.</div>
+      <div class="windows-warning"><strong>Windows beta notice</strong>These Windows beta installers are unsigned. Microsoft Defender SmartScreen may display an unknown-publisher warning. Download only from Slowfield Audio and continue only if you trust the file.</div>
+    </div>
+
+    <div class="hero-art"><img src="../downloads/minimusmaximus/minimusmaximus-interface.png" alt="MinimusMaximus plugin beta"></div>
+  </div>
+</section>
+
+<section class="feature-shell">
+  <div class="wrap">
+    <div class="features">
+      <div class="feature"><div class="symbol">◉</div><b>character</b><span>Choose the overall attitude: Warm, Wide, Deep, Alive, Dusty or Strange.</span></div>
+      <div class="feature"><div class="symbol">⌖</div><b>focus</b><span>Tell the processing to care most about Transient, Body, Air or the Full signal.</span></div>
+      <div class="feature"><div class="symbol">◎</div><b>effort</b><span>One large macro moves several processes together so the sound stays coherent.</span></div>
+      <div class="feature"><div class="symbol">↯</div><b>flip + random</b><span>Find a musical opposite or generate a fresh, sensible variation in one move.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div><div class="eyebrow">your first five minutes</div><h2>choose. turn. listen.</h2></div>
+      <p>Start with a Character and Focus, then raise Effort until the sound feels alive without losing its identity. Add Rev Grain, Glitch or Micro Loop only when you want more obvious movement.</p>
+    </div>
+
+    <div class="product-block">
+      <div class="screen"><img src="../downloads/minimusmaximus/minimusmaximus-interface.png" alt="MinimusMaximus controls"></div>
+      <div class="copy">
+        <h3>move deeper into the same sound.</h3>
+        <p>MinimusMaximus is designed so the main controls feel related rather than like separate effects. Effort coordinates the transformation; the lower controls then shape how much motion, space, glue and stereo scale remain.</p>
+        <div class="list">
+          <div class="item"><strong>Rev Grain</strong><span>Smooth reverse-grain clouds around the source.</span></div>
+          <div class="item"><strong>Glitch</strong><span>Tempo-conscious edits and repeats, from restrained to disruptive.</span></div>
+          <div class="item"><strong>Micro Loop</strong><span>Flowing tempo-synchronised loop fragments with long crossfades and harmonic-safe relationships.</span></div>
+          <div class="item"><strong>Motion · Space · Glue · Width · Output</strong><span>Five broad final moves for animation, atmosphere, cohesion, stereo scale and level.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap beta">
+    <div class="panel">
+      <div class="eyebrow">why this beta exists</div>
+      <h3>help us find the musical edge cases.</h3>
+      <p>MinimusMaximus is being shared early so real sessions can reveal host-specific bugs, awkward gain changes and places where the creative effects stop feeling musical.</p>
+      <p>We also want to know which Character and Focus combinations become the useful everyday starting points.</p>
+    </div>
+    <div class="panel">
+      <div class="eyebrow">feedback that helps</div>
+      <h3>tell us what happened.</h3>
+      <div class="feedback-list">
+        <div><b>feel</b><span>Did Effort stay musical across its range?</span></div>
+        <div><b>source</b><span>What instrument or material were you processing?</span></div>
+        <div><b>host</b><span>Your DAW/version, macOS or Windows version, format and build version.</span></div>
+        <div><b>bugs</b><span>Clicks, crashes, preset issues, automation problems or anything repeatable.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap"><div class="footer-logo">slowfield audio</div>Slowfield Audio · MinimusMaximus beta 2.12.7 · macOS + Windows · hello@slowfieldaudio.com</div></footer>
+
+<script>
+(function () {
+  function pluginFromUrl(url) {
+    const u = (url || '').toLowerCase();
+    if (u.includes('minimusmaximus')) return 'MinimusMaximus';
+    if (u.includes('stillroom')) return 'Stillroom';
+    if (u.includes('the-sandwich') || u.includes('sandwich')) return 'The Sandwich';
+    if (u.includes('strange-studies') || u.includes('strange_studies') || u.includes('strangestudies')) return 'Strange Studies';
+    if (u.includes('traces')) return 'Traces';
+    if (u.includes('perculator')) return 'Perculator';
+    return 'Unknown';
+  }
+
+  function platformFromUrl(url) {
+    const u = (url || '').toLowerCase();
+    if (u.endsWith('.pkg') || u.endsWith('.dmg') || u.includes('macos') || u.includes('-mac')) return 'macOS';
+    if (u.endsWith('.exe') || u.includes('windows') || u.includes('-win')) return 'Windows';
+    return 'Other';
+  }
+
+  document.addEventListener('click', function (e) {
+    const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+
+    const href = a.href || '';
+    const clean = href.split('?')[0].toLowerCase();
+    if (!/\.(pkg|exe|dmg|zip)$/.test(clean)) return;
+
+    if (typeof window.gtag === 'function') {
+      const fileName = clean.split('/').pop() || '';
+      window.gtag('event', 'beta_download', {
+        plugin_name: pluginFromUrl(href + ' ' + location.pathname),
+        download_platform: platformFromUrl(href),
+        file_name: fileName,
+        link_url: href,
+        page_path: location.pathname,
+        transport_type: 'beacon'
+      });
+    }
+  }, true);
+})();
+</script>
+
+</body>
+</html>

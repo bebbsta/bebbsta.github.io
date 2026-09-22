@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="Traces by Slowfield Audio — three atmospheric delay characters for echoes, movement and texture. Free public beta for macOS AU/VST3 and Windows VST3." />
+<title>Traces — Slowfield Audio</title>
+<style>
+  :root{
+    --ink:#1d2b31; --muted:#62747a; --paper:#f4f1e9; --panel:#ebe8df;
+    --line:rgba(29,43,49,.16); --navy:#153948; --sea:#4d8e93; --rose:#c88f86;
+    --amber:#bd8436; --soft:#fffdf8; --shadow:0 18px 55px rgba(18,31,37,.14);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+  a{color:inherit}
+  .shell{max-width:1240px;margin:auto;padding:0 28px}
+  header{position:sticky;top:0;z-index:20;background:rgba(244,241,233,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+  .nav{height:74px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:760;letter-spacing:.01em}
+  .mark{width:34px;height:22px;position:relative}.mark:before,.mark:after{content:"";position:absolute;border:1.5px solid var(--ink);border-radius:50%;width:20px;height:20px;top:0}.mark:before{left:0}.mark:after{right:0}
+  .navlinks{display:flex;gap:24px;align-items:center;font-size:.9rem}.navlinks a{text-decoration:none;color:var(--muted)}
+  .navlinks a:hover{color:var(--ink)}
+  .hero{padding:82px 0 54px;display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center}
+  .eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:.74rem;font-weight:760;color:var(--sea)}
+  h1{font-size:clamp(4.6rem,10vw,8.8rem);line-height:.8;letter-spacing:-.07em;margin:20px 0 26px;font-weight:440}
+  .tagline{font-size:clamp(1.25rem,2.5vw,2rem);line-height:1.25;max-width:700px;margin:0 0 20px}
+  .lead{font-size:1.06rem;color:var(--muted);max-width:680px}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 0}.chip{border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:.8rem;background:rgba(255,255,255,.38)}
+  .hero-card{border-radius:26px;overflow:hidden;box-shadow:var(--shadow);background:#162c35;position:relative;transform:rotate(.4deg)}
+  .hero-card img{display:block;width:100%;height:auto}
+  .hero-card:after{content:"afterimage · tideline · lantern";position:absolute;left:18px;bottom:16px;background:rgba(15,31,39,.74);color:#fff;padding:8px 12px;border-radius:999px;font-size:.73rem;letter-spacing:.08em}
+
+  .platform-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .platform-badge{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:11px;border:1px solid currentColor;font-size:12px;font-weight:800;letter-spacing:.02em;background:rgba(255,255,255,.35)}
+  .platform-badge .apple-mark{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:20px;line-height:1;transform:translateY(-1px)}
+  .platform-badge .au-mark{display:inline-grid;place-items:center;min-width:28px;height:22px;padding:0 5px;border:1.5px solid currentColor;border-radius:6px;font-size:11px;letter-spacing:.08em;font-weight:900}
+  .platform-badge .windows-mark{display:grid;grid-template-columns:repeat(2,8px);grid-template-rows:repeat(2,8px);gap:2px;width:18px;height:18px}
+  .platform-badge .windows-mark i{display:block;background:currentColor}
+  .platform-badge .vst-mark{display:inline-grid;place-items:center;min-width:38px;height:22px;padding:0 6px;border:1.5px solid currentColor;border-radius:6px;font-size:10px;letter-spacing:.08em;font-weight:900}
+  .back-to-plugins{margin-top:18px}
+  .download-band{margin:36px 0 94px;padding:28px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.45);display:grid;grid-template-columns:1fr auto;gap:26px;align-items:center}
+  .download-band h2{margin:0 0 6px;font-size:1.45rem}.download-band p{margin:0;color:var(--muted)}
+  .actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border-radius:999px;text-decoration:none;font-weight:710;font-size:.88rem;border:1px solid var(--ink)}
+  .btn.primary{background:var(--ink);color:white}.btn.secondary{background:transparent}.btn:hover{transform:translateY(-1px)}
+  section{padding:76px 0;border-top:1px solid var(--line)}
+  .section-head{display:grid;grid-template-columns:.75fr 1.25fr;gap:40px;margin-bottom:42px}.section-head h2{font-size:clamp(2rem,4.5vw,4rem);line-height:1;margin:0;letter-spacing:-.04em;font-weight:520}.section-head p{margin:0;color:var(--muted);font-size:1.02rem;max-width:720px}
+  .modes{display:grid;gap:42px}.mode{display:grid;grid-template-columns:1.2fr .8fr;gap:34px;align-items:center}.mode:nth-child(even){grid-template-columns:.8fr 1.2fr}.mode:nth-child(even) .shot{order:2}
+  .shot{border-radius:22px;overflow:hidden;box-shadow:var(--shadow);background:#0c1b22}.shot img{width:100%;display:block}.mode-copy{padding:18px}.mode-kicker{text-transform:uppercase;letter-spacing:.15em;font-size:.72rem;font-weight:760}.mode h3{font-size:2.3rem;margin:.35rem 0 1rem;letter-spacing:-.035em}.mode p{color:var(--muted);margin:0 0 14px}.mode ul{padding-left:18px;color:var(--muted)}
+  .afterimage .mode-kicker{color:var(--rose)}.tideline .mode-kicker{color:var(--sea)}.lantern .mode-kicker{color:var(--amber)}
+  .feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.feature{min-height:210px;border:1px solid var(--line);border-radius:20px;padding:24px;background:rgba(255,255,255,.38)}.feature span{display:block;font-size:1.65rem;margin-bottom:34px}.feature h3{margin:0 0 8px;font-size:1rem}.feature p{margin:0;color:var(--muted);font-size:.9rem}
+  .beta{display:grid;grid-template-columns:1fr 1fr;gap:22px}.notice{border-radius:20px;padding:26px;border:1px solid var(--line);background:var(--soft)}.notice h3{margin:0 0 10px}.notice p{color:var(--muted);margin:.6rem 0}.notice code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eeeae1;padding:2px 6px;border-radius:5px;font-size:.85em}
+  .feedback{background:var(--navy);color:white;border-radius:28px;padding:40px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center}.feedback p{color:rgba(255,255,255,.72);margin:.5rem 0 0}.feedback .btn{border-color:white}.feedback .secondary{color:white}
+  footer{padding:34px 0 50px;color:var(--muted);font-size:.86rem}.foot{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}.foot a{text-decoration:none}.foot a:hover{text-decoration:underline}
+  @media(max-width:900px){.hero,.section-head,.mode,.mode:nth-child(even),.beta,.download-band,.feedback{grid-template-columns:1fr}.mode:nth-child(even) .shot{order:0}.feature-grid{grid-template-columns:1fr 1fr}.actions{justify-content:flex-start}.navlinks a:not(.keep){display:none}}
+  @media(max-width:560px){.shell{padding:0 18px}.hero{padding-top:56px}.feature-grid{grid-template-columns:1fr}.download-band{padding:22px}h1{font-size:4.8rem}}
+</style>
+
+<style id="plugins-header-exact-fix">
+header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:30 !important;
+  background:rgba(9,19,20,.94) !important;
+  backdrop-filter:blur(16px) !important;
+  border-bottom:1px solid #223639 !important;
+}
+header .wrap{
+  max-width:1180px !important;
+  margin:auto !important;
+  padding:0 28px !important;
+}
+header .nav{
+  min-height:78px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:22px !important;
+}
+header .brand-logo img{
+  display:block !important;
+  width:220px !important;
+  max-height:56px !important;
+  height:auto !important;
+  object-fit:contain !important;
+}
+header .navlinks{
+  display:flex !important;
+  align-items:center !important;
+  gap:24px !important;
+  font-size:13px !important;
+}
+header .navlinks a{
+  color:#b8c5c3 !important;
+  text-decoration:none !important;
+}
+header .navlinks a:hover{
+  color:#fff !important;
+}
+header .navlinks .active{
+  color:white !important;
+  border-bottom:1px solid white !important;
+  padding-bottom:4px !important;
+}
+</style>
+
+
+<style id="traces-back-button-fix">
+.plugin-back-wrap{
+  max-width:1180px;
+  margin:0 auto;
+  padding:32px 28px 8px;
+}
+.plugin-back-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px 34px;
+  border:2px solid #213844;
+  border-radius:999px;
+  color:#213844;
+  text-decoration:none;
+  font-weight:700;
+  font-size:22px;
+  line-height:1;
+  background:transparent;
+}
+.plugin-back-button:hover{
+  background:#213844;
+  color:#fff;
+}
+@media(max-width:700px){
+  .plugin-back-wrap{
+    padding:24px 20px 4px;
+  }
+  .plugin-back-button{
+    font-size:18px;
+    padding:16px 26px;
+  }
+}
+</style>
+
+
+<style id="traces-back-button-size-fix">
+.plugin-back-wrap{
+  max-width:1180px !important;
+  margin:0 auto !important;
+  padding:20px 28px 8px !important;
+}
+.plugin-back-button{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:10px 18px !important;
+  border:1.5px solid #d8cfc7 !important;
+  border-radius:999px !important;
+  color:#f3ece6 !important;
+  background:transparent !important;
+  text-decoration:none !important;
+  font-weight:700 !important;
+  font-size:15px !important;
+  line-height:1.1 !important;
+  min-width:0 !important;
+  width:auto !important;
+}
+.plugin-back-button:hover{
+  background:#f3ece6 !important;
+  color:#111 !important;
+}
+</style>
+
+
+<style id="traces-back-button-text-fix">
+.plugin-back-button{
+  color:#111 !important;
+}
+.plugin-back-button:hover{
+  background:#111 !important;
+  color:#fff !important;
+}
+</style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ER0KL3CQ2Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ER0KL3CQ2Q');
+</script>
+
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand-logo" href="https://slowfieldaudio.com/"><img src="data:image/png;base64,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2MWLF+HfRSQSxcTE+Pj4kMlkUEersrJyMtnOXDCZTOA8Evqhs/mhEIlEO3funD17dkNDg8PhIBAI/v7+//nPf44dO+ZulriKWcB0Gxsbu2XLlpiYGKVSCaq8gAM22dnZR44ckcvlI/+CwWBWrlwZGBi4efNmjUbjuh4cHLxr167a2toPP/xwaPvw8PD3338/KytrJCPR6XSQ6AOCoLlz53Z1ddlsNplMNiqpCxYsOHz4MAwjUanUVatW/e53v0MikYAwUMPmp59+Onr06GTOz8XExGzatCktLa2zsxP4NFgs1pIlSwoLCwEvTazb2NjY999/n0qlajQau92OwWB8fX3b2tp2797tjh+4XO7OnTtzc3OHMRKDwdiyZUtHR4dSqXSnaoaGhr777rsBAQEqlcpisWAwGDqdXl9ff/LkSQhWuE1KSvroo49qampGnQ8Ac+fO3bx5s6+vr1qtBhOJy+UaDIZTp06dPHly8uev/pchfZK9QBCUnp6+dOnSzz77LDs722KxgG1Bp9PBSESgEABMn76+vp988gmBQPjiiy9kMllfXx8KheJwOOnp6e+99x6RSNy9e/fIIdBqtbdv3167dm1SUtL58+dd1yMjI9esWVNeXn706NGhm9IzzzyDQqFqa2tHEtDR0fHFF1+kpKTMnTt3//79zc3NDofD3Yz/X2Yz91i0aNG777574cKFY8eOdXd3OxwOCoWyaNGinTt3otHogwcPuvucCAQCZqXz8/N77733uFzu559/XlhYaDabUSiUWCx+4YUX3nvvPYlE8uWXX8IT5g4WiyUnJ6eqqkoul9vtdjwen5qaeuDAgV27dr344ovuSAWlQUfeIpFIWq3WHT/4+fkdOXLEy8trz549xcXFfX19OBwuKirqjTfe+NOf/gTBinY4HC40NNTLy8tdg+jo6E8//VSv13/++eelpaVmsxmLxUokkjVr1rzzzjsOh+PIkSMPGQtYAPO30+mcAh2JRqNptVqZTAaMv0aj8aFbrd1uB2Uz3DUAFU7nzZuXl5fnutjb21tTU+NwOHbt2pWbm5uTkzPyj5WVlWq1etu2bUMZKS4uLj8/n0qlJiUluRhJJBItX778woULoy5mJpPJZDIB6VSlUsEL4vBjKJFIXn755bKysk8++cTFMBqNJisri0wmr169+uLFiyPLvALAi2dz585NSEj4y1/+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" alt="Slowfield Audio"></a>
+    <nav class="navlinks">
+      <a href="https://slowfieldaudio.com/">← main site</a>
+      <a class='active' href='../plugins.html'>plugins</a>
+      <a href="https://slowfieldaudio.com/#about">the studio</a>
+      <a class="listen" href="https://sonalune.slowfieldaudio.com/">start listening ↗</a>
+    </nav>
+  </div>
+</header>
+<div class="plugin-back-wrap">
+  <a class='plugin-back-button' href='../plugins.html'>← Back to all plugins</a>
+</div>
+
+<main>
+  <div class="shell">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">creative delay / public beta 0.1.3</div>
+        <h1>traces</h1>
+        <p class="tagline">Three ways to leave a trace: echoes become memories, rhythm breathes with the tide, and light becomes pattern.</p>
+        <p class="lead">Traces is a character delay built for atmosphere rather than utility. Move between <strong>Afterimage</strong>, <strong>Tideline</strong> and <strong>Lantern</strong> while keeping one direct, playable control surface.</p>
+        <div class="chips"><span class="chip">mono + stereo</span><span class="chip">zero added latency</span></div>
+        <div class="platform-row" aria-label="Supported plugin formats">
+          <span class="platform-badge"><span class="apple-mark">●</span><span>macOS</span><span class="au-mark">AU</span><span class="vst-mark">VST3</span></span>
+          <span class="platform-badge"><span class="windows-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>Windows</span><span class="vst-mark">VST3</span></span>
+        </div>
+        <div class="back-to-plugins"></div>
+      </div>
+      <figure class="hero-card"><img src="assets/traces-afterimage.png" alt="Traces Afterimage interface" /></figure>
+    </div>
+
+    <div class="download-band" id="download">
+      <div><h2>Download the beta and help shape Traces</h2><p>No sign-up required. Test it in real sessions, report bugs, and tell us what becomes part of the final release.</p></div>
+      <div class="actions">
+        <a class="btn primary" href="https://6aadaf84b7fae635fb4df299--slowfield-audio-plugins-preview.netlify.app/traces/downloads/Traces-0.1.3-macOS-Universal-Beta.pkg">Mac beta · AU + VST3</a>
+        <a class="btn primary" href="https://6aadaf84b7fae635fb4df299--slowfield-audio-plugins-preview.netlify.app/traces/downloads/Traces-0.1.3-Windows-x64-Setup.exe">Windows beta · VST3</a>
+        <a class="btn secondary" href="https://6aadaf84b7fae635fb4df299--slowfield-audio-plugins-preview.netlify.app/traces/downloads/Traces-User-Guide-Landscape.pdf">User guide</a>
+      </div>
+    </div>
+  </div>
+
+  <section id="modes">
+    <div class="shell">
+      <div class="section-head"><h2>One delay.<br>Three behaviours.</h2><p>The controls stay familiar while each mode changes what the repeats are trying to do. The emphasis is movement, colour and musical instability rather than adding another conventional delay to the folder.</p></div>
+      <div class="modes">
+        <article class="mode afterimage">
+          <div class="shot"><img src="assets/traces-afterimage.png" alt="Traces Afterimage mode" /></div>
+          <div class="mode-copy"><div class="mode-kicker">01 / afterimage</div><h3>echoes become memories</h3><p>Afterimage softens and ages successive repeats so the delay gradually feels less like a copy and more like a recollection.</p><ul><li><strong>Memory</strong> changes the colour of the feedback path.</li><li><strong>Age</strong> introduces soft saturation, quantisation and flutter.</li><li>Useful for washed pads, unstable melodic fragments and dub-like tails that slowly lose certainty.</li></ul></div>
+        </article>
+        <article class="mode tideline">
+          <div class="shot"><img src="assets/traces-tideline.png" alt="Traces Tideline mode" /></div>
+          <div class="mode-copy"><div class="mode-kicker">02 / tideline</div><h3>let the rhythm breathe</h3><p>Tideline makes the wet signal rise and retreat in a tempo-related cycle. It can feel like a delay breathing around the source rather than sitting on top of it.</p><ul><li><strong>Tide</strong> sets the depth of the rolling wet-level movement.</li><li>Tempo-synced cycles keep the motion connected to the track.</li><li>Especially effective on ambient pulses, guitars, sparse percussion and evolving synth parts.</li></ul></div>
+        </article>
+        <article class="mode lantern">
+          <div class="shot"><img src="assets/traces-lantern.png" alt="Traces Lantern mode" /></div>
+          <div class="mode-copy"><div class="mode-kicker">03 / lantern</div><h3>patterns of light</h3><p>Lantern applies an eight-step accent and omission pattern with stereo movement. Repeats appear, disappear and shift position like points of light across a scene.</p><ul><li><strong>Light</strong> controls the amount of rhythmic patterning.</li><li>Pattern selection changes the accent/omission behaviour.</li><li>Ideal when a static echo needs animation without becoming a full sequencer.</li></ul></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shell">
+      <div class="section-head"><h2>Designed to stay playable.</h2><p>Traces keeps the experimental ideas behind a small set of controls, with practical tools for performance, preset comparison and fast recovery.</p></div>
+      <div class="feature-grid">
+        <div class="feature"><span>↺</span><h3>Forward, reverse or alternating</h3><p>Change the direction of the delay line without rebuilding the patch.</p></div>
+        <div class="feature"><span>◎</span><h3>Hold to Catch</h3><p>Stop new input entering the delay while the existing echoes continue to circulate, colour and decay.</p></div>
+        <div class="feature"><span>A/B</span><h3>A/B comparison</h3><p>Compare two versions of a setting and copy A to B when you want a safe starting point for experimentation.</p></div>
+        <div class="feature"><span>↔</span><h3>Spread + cross-feedback</h3><p>Move from mono wet signal to wider stereo behaviour with increasing interaction between channels.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="beta">
+    <div class="shell">
+      <div class="section-head"><h2>Beta installation notes.</h2><p>These builds are intentionally distributed for testing before code-signing and notarisation are finalised. Your operating system may therefore display a security warning even when the file was downloaded directly from Slowfield Audio.</p></div>
+      <div class="beta">
+        <div class="notice"><h3>macOS beta</h3><p>The current Mac installer is an unsigned/not-yet-notarised beta. macOS may say the package cannot be opened because Apple cannot check it for malicious software.</p><p>After downloading from this site, Control-click the package and choose <strong>Open</strong>, or use <strong>System Settings → Privacy &amp; Security → Open Anyway</strong> if macOS blocks the first launch.</p><p>The installer places AU and VST3 builds in the standard system plug-in locations.</p></div>
+        <div class="notice"><h3>Windows beta</h3><p>Windows SmartScreen may show <strong>“Windows protected your PC”</strong> because the beta installer is not yet code-signed and has not built reputation with Microsoft.</p><p>If you downloaded it directly from this page, choose <strong>More info → Run anyway</strong>. The installer places the VST3 in the standard <code>C:\Program Files\Common Files\VST3</code> location.</p><p>Do not bypass a warning for a copy obtained from an unknown third-party source.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shell">
+      <div class="feedback"><div><h2 style="margin:0">Found something odd?</h2><p>That is exactly what the beta is for. Tell us your DAW, operating system, what you were doing, and what happened. Reproducible bugs are particularly useful.</p></div><a class="btn secondary" href="mailto:hello@slowfieldaudio.com?subject=Traces%20beta%20feedback">send beta feedback</a></div>
+    </div>
+  </section>
+</main>
+<footer><div class="shell foot"><span>© Slowfield Audio · Traces beta 0.1.3</span><span><a href="../index.html">← return to plugins index</a> &nbsp;·&nbsp; <a href="https://slowfieldaudio.com">slowfieldaudio.com</a> &nbsp;·&nbsp; <a href="mailto:hello@slowfieldaudio.com">hello@slowfieldaudio.com</a></span></div></footer>
+
+<script>
+(function () {
+  function pluginFromUrl(url) {
+    const u = (url || '').toLowerCase();
+    if (u.includes('minimusmaximus')) return 'MinimusMaximus';
+    if (u.includes('stillroom')) return 'Stillroom';
+    if (u.includes('the-sandwich') || u.includes('sandwich')) return 'The Sandwich';
+    if (u.includes('strange-studies') || u.includes('strange_studies') || u.includes('strangestudies')) return 'Strange Studies';
+    if (u.includes('traces')) return 'Traces';
+    if (u.includes('perculator')) return 'Perculator';
+    return 'Unknown';
+  }
+
+  function platformFromUrl(url) {
+    const u = (url || '').toLowerCase();
+    if (u.endsWith('.pkg') || u.endsWith('.dmg') || u.includes('macos') || u.includes('-mac')) return 'macOS';
+    if (u.endsWith('.exe') || u.includes('windows') || u.includes('-win')) return 'Windows';
+    return 'Other';
+  }
+
+  document.addEventListener('click', function (e) {
+    const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+
+    const href = a.href || '';
+    const clean = href.split('?')[0].toLowerCase();
+    if (!/\.(pkg|exe|dmg|zip)$/.test(clean)) return;
+
+    if (typeof window.gtag === 'function') {
+      const fileName = clean.split('/').pop() || '';
+      window.gtag('event', 'beta_download', {
+        plugin_name: pluginFromUrl(href + ' ' + location.pathname),
+        download_platform: platformFromUrl(href),
+        file_name: fileName,
+        link_url: href,
+        page_path: location.pathname,
+        transport_type: 'beacon'
+      });
+    }
+  }, true);
+})();
+</script>
+
+</body>
+</html>
