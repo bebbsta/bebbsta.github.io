@@ -36,7 +36,7 @@ for page_name in ("plugins.html", "index.html"):
           <a class="btn syndrone" href="/syndrone_beta_product_page/">explore Syndrone</a>
           <a class="btn" download href="/downloads/syndrone/Syndrone-1.0.5-macOS-Universal.pkg">Mac beta</a>
           <a class="btn" download href="/downloads/syndrone/Syndrone-1.0.5-Windows-x64-Setup.exe">Windows beta</a>
-          <a class="btn" href="/downloads/syndrone/Syndrone-v1.0.5-User-Guide.pdf">User guide</a>
+          <a class="btn" href="/downloads/syndrone/Syndrone-v1.0.5-Expanded-Landscape-User-Guide.pdf">User guide</a>
         </div>
       </div>
     </article>
