@@ -10,6 +10,10 @@ on:
       - "site-source/**"
       - "release-assets/syndrone/**"
 
+concurrency:
+  group: slowfield-site-publish
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -38,6 +42,7 @@ jobs:
           # rather than inheriting any stale image from the currently deployed site.
           mkdir -p _snapshot/downloads/syndrone
           cp downloads/syndrone/syndrone-interface.jpg _snapshot/downloads/syndrone/syndrone-interface.jpg
+          cp downloads/syndrone/Syndrone-v1.0.5-Expanded-Landscape-User-Guide.pdf _snapshot/downloads/syndrone/Syndrone-v1.0.5-Expanded-Landscape-User-Guide.pdf
           python3 site-source/apply-syndrone.py _snapshot
 
       - name: Verify Syndrone public release
@@ -46,7 +51,7 @@ jobs:
           test -f _snapshot/downloads/syndrone/syndrone-interface.jpg
           test -f _snapshot/downloads/syndrone/Syndrone-1.0.5-macOS-Universal.pkg
           test -f _snapshot/downloads/syndrone/Syndrone-1.0.5-Windows-x64-Setup.exe
-          test -f _snapshot/downloads/syndrone/Syndrone-v1.0.5-User-Guide.pdf
+          test -s _snapshot/downloads/syndrone/Syndrone-v1.0.5-Expanded-Landscape-User-Guide.pdf
           grep -q 'explore Syndrone' _snapshot/plugins.html
 
       - name: Publish snapshot to main
@@ -61,5 +66,15 @@ jobs:
             echo "No website changes to publish"
           else
             git commit -m "Publish Slowfield Audio website [skip ci]"
-            git push
+            for attempt in 1 2 3; do
+              if git push; then
+                break
+              fi
+              if [ "$attempt" -eq 3 ]; then
+                echo "Push failed after 3 attempts"
+                exit 1
+              fi
+              git fetch origin main
+              git rebase origin/main
+            done
           fi
