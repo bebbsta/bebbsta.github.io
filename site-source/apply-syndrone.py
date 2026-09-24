@@ -64,3 +64,5 @@ for page_name in ("plugins.html", "index.html"):
 
 (root / "CNAME").write_text("plugins.slowfieldaudio.com\n", encoding="utf-8")
 (root / ".nojekyll").touch()
+
+# Syndrone catalogue deployment trigger
