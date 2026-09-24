@@ -78,3 +78,5 @@ jobs:
               git rebase origin/main
             done
           fi
+
+# Domain restored; rebuild catalogue with Syndrone
