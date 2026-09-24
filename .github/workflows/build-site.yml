@@ -43,14 +43,18 @@ jobs:
           mkdir -p _snapshot/downloads/syndrone
           cp downloads/syndrone/syndrone-interface.jpg _snapshot/downloads/syndrone/syndrone-interface.jpg
           cp downloads/syndrone/Syndrone-v1.0.5-Expanded-Landscape-User-Guide.pdf _snapshot/downloads/syndrone/Syndrone-v1.0.5-Expanded-Landscape-User-Guide.pdf
+          # Pull the real installer binaries from the private source repository.
+          # The public placeholders must never be published as zero-byte downloads.
+          curl -fL -H "Authorization: Bearer ${{ secrets.BETA_PLUGINS_TOKEN }}" -H "Accept: application/vnd.github.raw+json" "https://api.github.com/repos/bebbsta/Beta-plugins/contents/site-assets/syndrone/Syndrone-1.0.5-macOS-Universal.pkg?ref=main" -o _snapshot/downloads/syndrone/Syndrone-1.0.5-macOS-Universal.pkg
+          curl -fL -H "Authorization: Bearer ${{ secrets.BETA_PLUGINS_TOKEN }}" -H "Accept: application/vnd.github.raw+json" "https://api.github.com/repos/bebbsta/Beta-plugins/contents/site-assets/syndrone/Syndrone-1.0.5-Windows-x64-Setup.exe?ref=main" -o _snapshot/downloads/syndrone/Syndrone-1.0.5-Windows-x64-Setup.exe
           python3 site-source/apply-syndrone.py _snapshot
 
       - name: Verify Syndrone public release
         run: |
           test -f _snapshot/syndrone_beta_product_page/index.html
           test -f _snapshot/downloads/syndrone/syndrone-interface.jpg
-          test -f _snapshot/downloads/syndrone/Syndrone-1.0.5-macOS-Universal.pkg
-          test -f _snapshot/downloads/syndrone/Syndrone-1.0.5-Windows-x64-Setup.exe
+          test -s _snapshot/downloads/syndrone/Syndrone-1.0.5-macOS-Universal.pkg
+          test -s _snapshot/downloads/syndrone/Syndrone-1.0.5-Windows-x64-Setup.exe
           test -s _snapshot/downloads/syndrone/Syndrone-v1.0.5-Expanded-Landscape-User-Guide.pdf
           grep -q 'explore Syndrone' _snapshot/plugins.html
 
