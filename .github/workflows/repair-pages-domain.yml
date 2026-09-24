@@ -1,0 +1,23 @@
+name: Repair Slowfield Pages domain
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/repair-pages-domain.yml"
+
+permissions:
+  contents: read
+  pages: write
+
+jobs:
+  repair-domain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reattach plugins.slowfieldaudio.com to GitHub Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          curl --fail-with-body -L             -X PUT             -H "Accept: application/vnd.github+json"             -H "Authorization: Bearer $GH_TOKEN"             -H "X-GitHub-Api-Version: 2022-11-28"             "https://api.github.com/repos/$REPO/pages"             -d '{"cname":"plugins.slowfieldaudio.com","https_enforced":true}'
