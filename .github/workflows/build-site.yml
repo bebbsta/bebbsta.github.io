@@ -7,6 +7,8 @@ on:
     paths:
       - ".github/workflows/build-site.yml"
       - "perculator-interface.jpg"
+      - "site-source/**"
+      - "release-assets/syndrone/**"
 
 permissions:
   contents: write
@@ -30,9 +32,22 @@ jobs:
           cp perculator-interface.jpg _snapshot/downloads/perculator/perculator-interface.jpg
           touch _snapshot/.nojekyll
 
+      - name: Install Syndrone release and catalogue page
+        run: |
+          python3 site-source/apply-syndrone.py _snapshot
+
+      - name: Verify Syndrone public release
+        run: |
+          test -f _snapshot/syndrone_beta_product_page/index.html
+          test -f _snapshot/downloads/syndrone/syndrone-interface.jpg
+          test -f _snapshot/downloads/syndrone/Syndrone-1.0.5-macOS-Universal.pkg
+          test -f _snapshot/downloads/syndrone/Syndrone-1.0.5-Windows-x64-Setup.exe
+          test -f _snapshot/downloads/syndrone/Syndrone-v1.0.5-User-Guide.pdf
+          grep -q 'explore Syndrone' _snapshot/plugins.html
+
       - name: Publish snapshot to main
         run: |
-          find . -mindepth 1 -maxdepth 1 ! -name .git ! -name .github ! -name _snapshot ! -name perculator-interface.jpg ! -name README.md -exec rm -rf {} +
+          find . -mindepth 1 -maxdepth 1 ! -name .git ! -name .github ! -name _snapshot ! -name perculator-interface.jpg ! -name README.md ! -name site-source ! -name release-assets -exec rm -rf {} +
           cp -a _snapshot/. .
           rm -rf _snapshot
           git config user.name "github-actions[bot]"
