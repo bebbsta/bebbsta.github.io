@@ -12,6 +12,10 @@ dst_assets = root / "downloads" / "syndrone"
 dst_assets.mkdir(parents=True, exist_ok=True)
 for p in src_assets.iterdir():
     if p.is_file():
+        # The public Syndrone interface is uploaded directly to downloads/syndrone.
+        # Do not overwrite it with the legacy release-assets copy during rebuilds.
+        if p.name == "syndrone-interface.jpg" and (dst_assets / p.name).exists():
+            continue
         (dst_assets / p.name).write_bytes(p.read_bytes())
 
 for page_name in ("plugins.html", "index.html"):
