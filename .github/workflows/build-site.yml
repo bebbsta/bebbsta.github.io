@@ -34,6 +34,10 @@ jobs:
 
       - name: Install Syndrone release and catalogue page
         run: |
+          # Preserve the approved full-resolution Syndrone artwork from the repository,
+          # rather than inheriting any stale image from the currently deployed site.
+          mkdir -p _snapshot/downloads/syndrone
+          cp downloads/syndrone/syndrone-interface.jpg _snapshot/downloads/syndrone/syndrone-interface.jpg
           python3 site-source/apply-syndrone.py _snapshot
 
       - name: Verify Syndrone public release
