@@ -1,0 +1,113 @@
+name: Publish Happenstance catalogue card
+
+on:
+  push:
+    paths:
+      - ".github/workflows/publish-happenstance-card.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Import Happenstance interface artwork
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p downloads/happenstance /tmp/hapimg
+          curl -L --fail --retry 3 'https://sdmntprdenmarkeast.oaiusercontent.com/files/00000000-1fec-8210-88f5-6363e84b3445/raw?se=2026-09-25T17%3A33%3A46Z&sp=r&sv=2026-02-06&sr=b&scid=6ae8d63a-e196-579b-98ee-6c7cbb950ac9&skoid=56822d8b-6cfd-42ed-a00d-1452dca42036&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T16%3A26%3A51Z&ske=2026-09-26T16%3A26%3A51Z&sks=b&skv=2026-02-06&sig=r/Vz6UsJx/2Tr%2BIwrgdfaKYl4Go3FvBVe99k5u/Yr0I%3D' -o /tmp/hapimg.zip
+          unzip -q /tmp/hapimg.zip -d /tmp/hapimg
+          cp /tmp/hapimg/happenstance-interface.png downloads/happenstance/happenstance-interface.png
+          test -s downloads/happenstance/happenstance-interface.png
+
+      - name: Add Happenstance card to existing catalogue only
+        shell: python
+        run: |
+          from pathlib import Path
+
+          card = r'''
+          <article class="card" id="happenstance-card">
+            <div class="media happenstance-media"><img src="/downloads/happenstance/happenstance-interface.png?v=1224" alt="Happenstance plugin interface"></div>
+            <div class="body">
+              <div class="product-kicker">intelligent musical accident generator · beta 1.2.24</div>
+              <h2>Happenstance</h2>
+              <p>Listen first, then change, explore, keep and evolve. Happenstance analyses the phrase and creates rhythm-aware accidents ranging from restrained rearrangements to ghosted, spacious and shimmering mutations.</p>
+              <div class="meta">
+                <span class="tag">macOS</span>
+                <span class="tag">Windows</span>
+                <span class="tag">AU / VST3</span>
+                <span class="tag">beta</span>
+              </div>
+              <div class="actions">
+                <a class="btn happenstance" href="/happenstance_beta_product_page/">explore Happenstance</a>
+                <a class="btn" download href="/downloads/happenstance/Happenstance-1.2.24-macOS-Universal.pkg">Mac beta</a>
+                <a class="btn" download href="/downloads/happenstance/Happenstance-1.2.24-Windows-x64-Setup.exe">Windows beta</a>
+                <a class="btn" href="/happenstance_user_guide/">User guide</a>
+              </div>
+            </div>
+          </article>
+          '''.strip()
+
+          css = r'''
+          <style id="happenstance-card-style">
+          .btn.happenstance{background:#d3422c!important;border-color:#d3422c!important;color:#fff!important;box-shadow:0 7px 20px rgba(163,55,38,.22)}
+          .btn.happenstance:hover{filter:brightness(1.08);transform:translateY(-1px)}
+          .happenstance-media{background:#10272b;min-height:260px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+          .happenstance-media img{width:100%;height:100%;object-fit:contain;display:block}
+          </style>
+          '''.strip()
+
+          def replace_article(text, article_id, new_html):
+              marker = f'<article class="card" id="{article_id}">'
+              start = text.find(marker)
+              if start < 0:
+                  return None
+              end = text.find('</article>', start)
+              if end < 0:
+                  raise RuntimeError(f"Could not find end of {article_id}")
+              end += len('</article>')
+              return text[:start] + new_html + text[end:]
+
+          for name in ("index.html", "plugins.html"):
+              p = Path(name)
+              text = p.read_text(encoding="utf-8", errors="ignore")
+
+              replaced = replace_article(text, "happenstance-card", card)
+              if replaced is not None:
+                  text = replaced
+              else:
+                  syndrone_marker = '<article class="card" id="syndrone-card">'
+                  start = text.find(syndrone_marker)
+                  if start < 0:
+                      raise RuntimeError(f"{name}: Syndrone card not found; refusing to redesign catalogue")
+                  end = text.find('</article>', start)
+                  if end < 0:
+                      raise RuntimeError(f"{name}: Syndrone card end not found")
+                  end += len('</article>')
+                  text = text[:end] + "\n" + card + text[end:]
+
+              if 'id="happenstance-card-style"' not in text:
+                  if "</head>" not in text:
+                      raise RuntimeError(f"{name}: </head> not found")
+                  text = text.replace("</head>", css + "\n</head>", 1)
+
+              p.write_text(text, encoding="utf-8")
+
+      - name: Commit Happenstance catalogue update
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html plugins.html downloads/happenstance/happenstance-interface.png
+          if git diff --cached --quiet; then
+            echo "Happenstance catalogue already current"
+          else
+            git commit -m "Add Happenstance to plugin catalogue"
+            git push
+          fi
