@@ -1,0 +1,198 @@
+name: Update Patina illustrated guide
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/update-patina-guide.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-guide:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install PDF dependencies
+        run: python -m pip install --quiet reportlab pillow pypdf
+
+      - name: Build larger-image Patina guide
+        shell: bash
+        run: |
+          cat > /tmp/build_patina_guide.py <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          from reportlab.pdfgen import canvas
+          from reportlab.lib.pagesizes import landscape, A4
+          from reportlab.lib.utils import ImageReader
+          from reportlab.lib.colors import HexColor
+          import textwrap
+
+          img_path = Path("downloads/patina/patina-interface.jpg")
+          out = Path("downloads/patina/Patina-User-Guide-Landscape.pdf")
+          work = Path("/tmp/patina-guide")
+          work.mkdir(exist_ok=True)
+
+          img = Image.open(img_path).convert("RGB")
+          W,H = img.size
+          crops = {
+              "full": (0,0,W,H),
+              "main": (0,int(H*.18),W,int(H*.68)),
+              "top": (0,0,W,int(H*.55)),
+              "bottom": (0,int(H*.48),W,H),
+              "left": (0,int(H*.18),int(W*.52),int(H*.82)),
+              "right": (int(W*.45),int(H*.18),W,int(H*.82)),
+          }
+          cp={}
+          for k,box in crops.items():
+              p=work/f"{k}.jpg"
+              img.crop(box).save(p,"JPEG",quality=90,optimize=True)
+              cp[k]=p
+
+          pages = [
+            ("Make a sound feel remembered","A practical landscape guide for the AU and VST3 audio effect. Six recipes start on page 6.","full",[
+              ("PATINA","Darker colour. Gentle drift. Digital wear. Space.\n\nPATINA processes audio you already have: piano, synths, drums, voice or environmental recordings. Insert it after your instrument or on an audio track. It does not make notes or import samples."),
+              ("Guide map","Read the controls: 2-4\nCompare and save: 5\nSound recipes: 6-7\nFactory presets: 8\nTroubleshooting: 9"),
+              ("Your first minute","1. Play a piano or synth loop through PATINA.\n2. Select bank A and choose Subtle tape.\n3. Keep FX POWER orange. If the button says RESUME FX, click it to release Restore.\n4. Leave Evolve off. Raise Wear to taste and use Mix to blend the treatment.\n5. Copy to B, try a stronger setting, then compare A and B."),
+              ("Preset browsing","Use the arrows beside the preset menu to browse. They replace the selected bank, so SAVE first to keep your sound.")
+            ]),
+            ("01 / Shape the ageing","Hover over controls for help. Drag a dial, double-click it to reset, or click its value box to type.","main",[
+              ("Wear","Sets the amount of age directly when Evolve is off; sets the target when Evolve is on. 20-45% for gentle colour."),
+              ("Age Time","5-180 seconds to reach the Wear target with Evolve enabled. 45-90 s for a gradual transition."),
+              ("Instability","Pitch drift, flutter and a little signal-following dust. 0-15% for tuned keys; increase for wobble."),
+              ("Mix","Blends the ageing treatment; also scales the added lo-fi, delay and reverb. 40-65%; use less to retain attack."),
+              ("Output","Gain from -24 to +12 dB. Added effects can increase the final peaks. Start at 0 dB; lower if peaks turn red."),
+              ("Character","Fresh, Remembered and Almost forgotten become progressively more faded. Remembered for softly aged instruments."),
+              ("Status + Evolve","The status message beside the display explains Bypass, Restore, a zero main Mix or inactive lo-fi settings. Evolve ages while audio plays. Restore latches the effect fresh and resets age; RESUME FX releases it. Repeatable resets age, drift and tails at playback starts or seeks."),
+              ("Display note","The central percentage is the actual smoothed wear. The moving graph shows recent output peaks, not a frequency spectrum. Age Time does not set a delay time.")
+            ]),
+            ("02 / Add space","Delay and reverb sit after the ageing and lo-fi stages. Orange LEDs mean enabled; Amount still sets the audible contribution.","right",[
+              ("Delay: rhythm or a soft echo","Time: 30-1200 ms with TEMPO SYNC off. Changing time glides the echo pitch.\nFeedback: 0-75%. More feedback creates longer repeating trails.\nAmount: added echo level. Start at 10-25%.\nTEMPO SYNC disables the millisecond dial; choose the musical division instead."),
+              ("Reverb: distance and atmosphere","Size moves from compact rooms towards spacious tails. Amount adds diffuse ambience. Start at 10-20% for keys or drums, 25-35% for pads. Click the Reverb LED to compare without changing its settings. Reduce Amount before Size when a part feels too distant."),
+              ("Reading divisions","1/4 = a quarter note; 1/8 D = dotted eighth; 1/4 T = quarter-note triplet. At 120 BPM these are 500 ms, 375 ms and about 333 ms. The host tempo display identifies HOST or the 120 BPM FALLBACK."),
+              ("For clean comparisons","Leave some space between notes. Turning up Delay and Reverb together can raise peaks; use Output to leave headroom. Repeatable clears tails on playback restarts or detected seeks.")
+            ]),
+            ("03 / Add lo-fi texture","Click LO-FI beside the centre display. It replaces the main knob row; MAIN CONTROLS brings that row back.","left",[
+              ("Crush Mix","Blends in the crushed signal. At 0%, Bit Depth and Rate Reduction have no audible contribution. Try 15-30% first."),
+              ("Bit Depth","4-16 bits. Lower values make quantisation rougher and more obvious, especially in quiet details. Start at 10-12 bits."),
+              ("Rate Reduction","1-24x. Larger values hold samples longer and add coarse, aliasing textures. 1x leaves the sample rate unreduced. Try 2-4x."),
+              ("Hiss","Noise follows the input level and fades after notes. It works independently of Crush Mix. Start at 5-15%."),
+              ("Lo-fi LED","Enables or disables the whole section while retaining its settings. FX POWER, Restore and the main Mix also affect what you hear."),
+              ("A musical balance","For a soft worn edge, keep Bit Depth around 10-12, use moderate Rate Reduction and blend with Crush Mix. If chords lose definition, reduce Rate Reduction first. If quiet decays become gritty, increase Bit Depth."),
+              ("A useful comparison","Copy your main sound to B. Add lo-fi in B, then compare A and B over the same phrase. Hiss does not need to be loud to add texture. Check the end of notes as well as the attack.")
+            ]),
+            ("04 / Compare, save and recall","Factory presets and OPEN replace the selected bank. The other bank is retained; COPY intentionally overwrites its destination.","bottom",[
+              ("A/B without losing the starting sound","1. Select A and choose a factory preset.\n2. Click COPY TO B, then select B.\n3. Change B or load another preset into it.\n4. Switch A/B while a steady phrase plays.\n\nLEVEL MATCH attenuates the louder bank by up to 18 dB. Allow a few seconds to settle."),
+              ("Save your own .patina preset","1. Select the bank you want to keep.\n2. Click SAVE and use a name ending in .patina, such as Evening keys.patina.\n3. Choose a folder; the initial location is Documents / PATINA Presets.\n4. To recall, choose a bank and click OPEN.\n\nSAVE * means edits since this editor opened or the last load/save in this bank."),
+              ("Saved in a .patina file","One bank's sound controls, including Restore, Bypass and effect LEDs."),
+              ("Saved in your DAW project","Both banks, bank selection and global Level Match, alongside the current parameters."),
+              ("Not saved as sound history","Echo/reverb buffers and current age progress. Preset files also exclude DAW tempo and Level Match.")
+            ]),
+            ("05 / Recipes for musical parts","Load the named preset first. Keep Evolve off, Restore released and FX POWER orange. Values below override the preset; other values stay as loaded.","full",[
+              ("Dusty piano","Start: Worn piano. Play a sparse piano or electric-piano phrase.\nWear 40%, Instability 8%, Mix 55%.\nDelay: 280 ms, Feedback 25%, Amount 20%.\nReverb: Size 40%, Amount 18%.\nListen for: soft edges with a clear first strike. Reduce Mix if chords lose detail."),
+              ("Floating pad","Start: Faded pads. Use a slowly changing sustained synth.\nWear 55%, Instability 12%, Mix 65%.\nDelay: 650 ms, Feedback 45%, Amount 30%.\nReverb: Size 80%, Amount 35%.\nListen for: a moving halo around the chord. Use fewer notes if tails become crowded."),
+              ("Worn drum room","Start: Aged drums. Use a simple drum loop with some space.\nWear 35%, Instability 0%, Mix 45%.\nDelay: 90 ms, Feedback 12%, Amount 8%.\nReverb: Size 25%, Amount 12%.\nListen for: body and short reflections without detuned drums.")
+            ]),
+            ("06 / Recipes for atmosphere","These are suggested starting settings, not measured guarantees. Use your source and ears to set the final Mix and Output.","top",[
+              ("Faded digital memory","Start: Sun-bleached reel. Try a gentle synth melody or a sampled chord.\nWear 35%, Instability 10%, Mix 50%.\nLO-FI: Crush Mix 25%, Bit Depth 10, Rate Reduction 3x, Hiss 8%.\nKeep the preset's ambience; reduce Delay Amount if it distracts."),
+              ("Distant landscape","Start: Frozen postcard. Feed it rain, a room recording, wind or distant activity.\nWear 45%, Instability 4%, Mix 60%.\nDelay: Sync on, Division 1/1, Feedback 35%, Amount 18%.\nReverb: Size 85%, Amount 30%.\nListen for: depth without losing the location."),
+              ("A disappearing ending","Start: Last light. Use the closing phrase of a song or a held chord.\nWear 85%, Age Time 30 s, Instability 18%, Mix 65%.\nEvolve ON; Repeatable ON. Click Restore, then RESUME FX at the start of the passage. Keep audio playing.")
+            ]),
+            ("07 / Choose a factory starting point","Twenty effect presets, organised here by listening purpose. Preset names describe treatments; they do not contain samples or instruments.","full",[
+              ("Gentle colour / instruments","Subtle tape - light colour.\nGentle warmth - softening with stable pitch.\nWorn piano - darker keys.\nPaper lantern - soft keys and gentle ambience.\nVelvet room - restrained wear and compact reverb.\nAged drums - stronger colour, steady pitch."),
+              ("Movement / texture","Sun-bleached reel - drift with mild digital wear.\nUnstable cassette - obvious drift.\nRain on cassette - wobble, digital wear and dotted echoes.\nCracked radio - dark, crushed voice/sample treatment.\nDusty projector - strong movement, grain and hiss.\nRusted drum room - short slap and a tight room."),
+              ("Space / evolving passages","Faded pads - softened sustained texture.\nDistant room - heavily faded tone.\nTemple after dusk - long dotted echoes.\nGhost waltz - triplet repeats.\nHalf remembered - dark half-note trails.\nFrozen postcard - whole-note ambience.\nSlow decay - 60-second evolution.\nLast light - 20-second evolution."),
+              ("Preset note","Most factory presets apply their treatment immediately with Evolve off. Slow decay and Last light deliberately change over time. For fair comparisons, use the same passage and let Level Match settle.")
+            ]),
+            ("08 / If something does not sound right","Start with the incoming track, then check power, Restore, Mix and the individual effect amount.","full",[
+              ("No sound at all","Confirm the source track produces audio with PATINA bypassed. PATINA is an audio effect, so it needs an instrument or recording feeding it."),
+              ("Sound is clean / wear stays at 0%","Turn FX POWER on. If RESUME FX is shown, click it. Raise Wear and Mix. With Evolve on, allow time for age to grow."),
+              ("An orange LED makes no difference","An enabled effect still needs Amount above zero. For lo-fi, raise Crush Mix or Hiss. Main Mix and Restore also govern the result."),
+              ("Delay Time will not move","TEMPO SYNC disables the millisecond control. Change the note division, or turn Sync off. FALLBACK means the plugin is using 120 BPM."),
+              ("Too much wobble, grit or blur","Lower Instability for steadier pitch. Raise Bit Depth or reduce Rate Reduction for smoother lo-fi. Lower Feedback and ambience Amounts for clearer notes."),
+              ("Values change after loading a preset","DAW automation can override recalled settings. Pause the relevant automation while comparing fixed sounds. Save the selected bank before replacing it."),
+              ("Tail disappears / sound restarts","Repeatable resets histories on playback starts or detected seeks. Loading or copying presets also resets the affected bank. Turn Repeatable off for continuous passes."),
+              ("Update fails or AU is missing","Close the DAW before updating. Rescan plug-ins after installation if the new version does not appear.")
+            ])
+          ]
+
+          pw,ph=landscape(A4)
+          c=canvas.Canvas(str(out),pagesize=(pw,ph))
+          BG=HexColor("#f5f1e7"); INK=HexColor("#253238"); MUTED=HexColor("#607277")
+          TERR=HexColor("#a44934"); PANEL=HexColor("#fffaf1"); LINE=HexColor("#d8c9b2")
+
+          def fit(path,x,y,w,h):
+              im=Image.open(path); iw,ih=im.size
+              s=min(w/iw,h/ih); dw,dh=iw*s,ih*s
+              c.drawImage(ImageReader(im),x+(w-dw)/2,y+(h-dh)/2,dw,dh,mask='auto')
+
+          def wrapped(text,width,size):
+              chars=max(16,int(width/(size*.52))); out=[]
+              for para in text.split("\n"):
+                  out += [""] if not para.strip() else textwrap.wrap(para,width=chars,break_long_words=False)
+              return out
+
+          def block(x,y,w,h,title,body,size=7.2):
+              c.setFillColor(PANEL); c.setStrokeColor(LINE); c.roundRect(x,y,w,h,8,fill=1,stroke=1)
+              c.setFillColor(INK); c.setFont("Helvetica-Bold",9.2); c.drawString(x+8,y+h-14,title)
+              lines=wrapped(body,w-16,size)[:max(1,int((h-28)/(size+2.2)))]
+              c.setFillColor(MUTED); c.setFont("Helvetica",size); ty=y+h-26
+              for line in lines:
+                  c.drawString(x+8,ty,line); ty-=size+2.2
+
+          for num,(title,subtitle,image_key,blocks) in enumerate(pages,1):
+              c.setFillColor(BG); c.rect(0,0,pw,ph,fill=1,stroke=0)
+              c.setFillColor(INK); c.setFont("Helvetica-Bold",7.5)
+              c.drawString(24,ph-21,"SLOWFIELD AUDIO  /  PATINA  /  USER GUIDE  /  0.5.3")
+              c.setFillColor(TERR); c.setFont("Helvetica-Bold",20); c.drawString(24,ph-49,title)
+              c.setFillColor(MUTED); c.setFont("Helvetica",8.5); c.drawString(24,ph-65,subtitle)
+              c.setStrokeColor(LINE); c.line(24,ph-75,pw-24,ph-75)
+              c.setFillColor(MUTED); c.setFont("Helvetica",7.5); c.drawRightString(pw-24,18,f"{num:02d} / 09")
+
+              img_x=24; img_y=75; img_w=pw*.46; img_h=ph-118
+              fit(cp[image_key],img_x,img_y,img_w,img_h)
+
+              top_count=3 if len(blocks)>=6 else 2 if len(blocks)>=4 else min(2,len(blocks))
+              top_blocks=blocks[:top_count]; bottom_blocks=blocks[top_count:]
+              right_x=img_x+img_w+14; right_w=pw-right_x-24
+              top_total_h=ph*.48; gap=7; bh=(top_total_h-gap*(len(top_blocks)-1))/len(top_blocks)
+              y=ph-82-bh
+              for t,b in top_blocks:
+                  block(right_x,y,right_w,bh,t,b,7.5 if len(top_blocks)<=2 else 7.1); y-=bh+gap
+
+              if bottom_blocks:
+                  bottom_y=24; bottom_h=img_y+42-bottom_y
+                  n=len(bottom_blocks); cols=3 if n>=3 else n; rows=(n+cols-1)//cols
+                  strip_x=24; strip_w=pw-48; cg=8; rg=7
+                  cw=(strip_w-cg*(cols-1))/cols; ch=(bottom_h-rg*(rows-1))/rows
+                  for i,(t,b) in enumerate(bottom_blocks):
+                      col=i%cols; row=i//cols
+                      x=strip_x+col*(cw+cg); y=bottom_y+(rows-1-row)*(ch+rg)
+                      block(x,y,cw,ch,t,b,6.9 if rows>1 else 7.2)
+              c.showPage()
+          c.save()
+          PY
+
+          python /tmp/build_patina_guide.py
+
+          # Compress without changing the public filename.
+          gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook              -dNOPAUSE -dQUIET -dBATCH              -sOutputFile=/tmp/Patina-User-Guide-Landscape.pdf              downloads/patina/Patina-User-Guide-Landscape.pdf
+          mv /tmp/Patina-User-Guide-Landscape.pdf downloads/patina/Patina-User-Guide-Landscape.pdf
+
+      - name: Commit replacement guide
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s downloads/patina/Patina-User-Guide-Landscape.pdf
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add downloads/patina/Patina-User-Guide-Landscape.pdf
+          if git diff --cached --quiet; then
+            echo 'Patina guide already current'
+          else
+            git commit -m 'Replace Patina user guide with illustrated larger-image edition'
+            git push
+          fi
