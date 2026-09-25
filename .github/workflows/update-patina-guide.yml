@@ -178,10 +178,6 @@ jobs:
 
           python /tmp/build_patina_guide.py
 
-          # Compress without changing the public filename.
-          gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook              -dNOPAUSE -dQUIET -dBATCH              -sOutputFile=/tmp/Patina-User-Guide-Landscape.pdf              downloads/patina/Patina-User-Guide-Landscape.pdf
-          mv /tmp/Patina-User-Guide-Landscape.pdf downloads/patina/Patina-User-Guide-Landscape.pdf
-
       - name: Commit replacement guide
         shell: bash
         run: |
