@@ -3,7 +3,7 @@ name: Publish Happenstance catalogue card
 on:
   push:
     paths:
-      - ".github/workflows/publish-happenstance-card.yml"
+      - ".github/workflows/publish-happenstance-card.yml"\n      - "happenstance-publish-trigger.txt"
   workflow_dispatch:
 
 permissions:
