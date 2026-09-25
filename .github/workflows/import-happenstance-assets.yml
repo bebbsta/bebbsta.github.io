@@ -1,0 +1,37 @@
+name: Import Happenstance installers
+
+on:
+  push:
+    paths:
+      - ".github/workflows/import-happenstance-assets.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download installer artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p downloads/happenstance /tmp/hapmac /tmp/hapwin
+          curl -L --fail --retry 3 'https://sdmntprdenmarkeast.oaiusercontent.com/files/00000000-efbc-8210-81e0-6485c0906e66/raw?se=2026-09-25T17%3A25%3A28Z&sp=r&sv=2026-02-06&sr=b&scid=f56af02d-b2ec-5ef9-b088-51ce91be1cd2&skoid=56822d8b-6cfd-42ed-a00d-1452dca42036&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T17%3A14%3A47Z&ske=2026-09-26T17%3A14%3A47Z&sks=b&skv=2026-02-06&sig=7kxdjr202qytX7km630M9AETxVkf4PZn/qp7y18KOMs%3D' -o /tmp/mac.zip
+          curl -L --fail --retry 3 'https://sdmntprdenmarkeast.oaiusercontent.com/files/00000000-26c8-8210-95b2-fed854d70f38/raw?se=2026-09-25T17%3A25%3A26Z&sp=r&sv=2026-02-06&sr=b&scid=e3fb93da-b202-5b83-ae32-6d7dba8fcba6&skoid=56822d8b-6cfd-42ed-a00d-1452dca42036&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T15%3A49%3A09Z&ske=2026-09-26T15%3A49%3A09Z&sks=b&skv=2026-02-06&sig=kO1X6vG809LvkNeMsLazJ3Na3oo4Eaf0NW13cAcnopg%3D' -o /tmp/win.zip
+          unzip -q /tmp/mac.zip -d /tmp/hapmac
+          unzip -q /tmp/win.zip -d /tmp/hapwin
+          cp /tmp/hapmac/Happenstance-1.2.24-macOS-Universal.pkg downloads/happenstance/
+          cp /tmp/hapwin/Happenstance-1.2.24-Windows-x64-Setup.exe downloads/happenstance/
+          test -s downloads/happenstance/Happenstance-1.2.24-macOS-Universal.pkg
+          test -s downloads/happenstance/Happenstance-1.2.24-Windows-x64-Setup.exe
+      - name: Commit installers
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add downloads/happenstance
+          git commit -m "Publish Happenstance 1.2.24 installers"
+          git push
