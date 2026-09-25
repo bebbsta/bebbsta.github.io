@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Patina Beta — Slowfield Audio</title>
+<meta name="description" content="Patina by Slowfield Audio — add age, drift, digital wear and atmospheric space to instruments, vocals and found sound.">
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f1e7;color:#173740}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1380px;margin:auto;padding:0 30px}
+header{position:sticky;top:0;z-index:20;background:rgba(245,241,231,.96);border-bottom:1px solid #d9ccb6;backdrop-filter:blur(16px)}
+.nav{min-height:82px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{font-size:18px;font-weight:750;letter-spacing:.18em;text-transform:lowercase;color:#111}
+.navlinks{display:flex;gap:25px;align-items:center;font-size:14px}
+.navlinks a{color:#274a52}.navlinks .main-return{font-weight:850;color:#050505}
+.plugins-return-row{padding-top:24px}
+.plugins-return{display:inline-flex;align-items:center;min-height:44px;padding:10px 18px;border:1px solid #415d61;border-radius:999px;font-size:14px;font-weight:700}
+.hero{padding:42px 0 42px;background:linear-gradient(180deg,#faf7ef 0%,#f5f1e7 100%)}
+.hero-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:40px;align-items:center}
+.eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:#8d6a42}
+h1{font-size:clamp(68px,7vw,110px);line-height:.86;font-weight:760;letter-spacing:-.05em;margin:16px 0 8px;color:#25231e}
+.tagline{font-size:23px;line-height:1.35;font-weight:650;color:#755b3d;margin:0 0 18px}
+.lede{font-size:18px;line-height:1.72;max-width:720px;color:#586a6d}
+.actions{display:flex;gap:13px;flex-wrap:wrap;margin-top:26px}
+.btn{padding:14px 20px;border-radius:12px;font-weight:780;border:1px solid #6b5843;background:white}
+.btn.primary{background:#a44934;border-color:#a44934;color:#fff}
+.btn.cream{background:#ede1cc;border-color:#d4c2a6}
+.btn.dark{background:#233538;border-color:#233538;color:#fff}
+.platform-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+.platform-badge{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:11px;border:1px solid currentColor;font-size:12px;font-weight:800;background:rgba(255,255,255,.72)}
+.bad-warnings{display:grid;gap:12px;margin-top:18px;max-width:760px}
+.warn{padding:14px 16px;border-radius:14px;font-size:12px;line-height:1.6}
+.warn strong{display:block;margin-bottom:4px}
+.warn.beta{background:#fff7e9;border:1px solid #edd7ad;color:#725f43}
+.warn.mac{background:#eef5f8;border:1px solid #c7d8e0;color:#486771}
+.warn.win{background:#f4efe2;border:1px solid #ddd0b8;color:#675c47}
+.hero-art{padding:0;border:none;border-radius:0;background:transparent;box-shadow:none}
+.hero-art img{display:block;width:100%;height:auto;border-radius:0}
+.band{padding:18px 0}
+.band-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.band-card{background:white;border:1px solid #dbceb7;border-radius:18px;padding:22px 20px;min-height:138px}
+.band-card b{display:block;margin-bottom:8px;font-size:16px;color:#3f3125}
+.band-card span{font-size:14px;line-height:1.55;color:#68777a}
+.section{padding:72px 0;border-top:1px solid #e2d7c4}
+.section h2{font-size:44px;line-height:1.04;font-weight:640;margin:0 0 16px;color:#283e42}
+.layout{display:grid;grid-template-columns:.92fr 1.08fr;gap:36px;align-items:start}
+.body{font-size:17px;line-height:1.76;color:#5e7378}
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+.panel{background:white;border:1px solid #dbceb7;border-radius:20px;padding:24px}
+.panel h3{font-size:28px;margin:0 0 12px;color:#4a3928}
+.panel p{margin:0;color:#5e7378;line-height:1.68}
+.recipe-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:24px}
+.recipe{background:#fffaf1;border:1px solid #dfd0b7;border-radius:18px;padding:20px}
+.recipe strong{display:block;color:#633e29;margin-bottom:7px}
+.recipe span{color:#63767a;font-size:14px;line-height:1.5}
+.cta{margin:0 0 72px;background:linear-gradient(135deg,#362c24,#6b4934);border-radius:24px;padding:34px;color:white}
+.cta h2{color:white}.cta p{color:#eee1d1;line-height:1.7;max-width:820px}
+footer{padding:30px 0 44px;border-top:1px solid #d9ccb6;color:#687d81}
+.footer-brand{font-size:17px;font-weight:850;letter-spacing:.18em;text-transform:lowercase;color:#111;margin-bottom:14px}
+@media(max-width:980px){.nav{flex-direction:column;align-items:flex-start;padding:14px 0}.hero-grid,.layout,.dual{grid-template-columns:1fr}.band-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.band-grid,.recipe-grid{grid-template-columns:1fr}}
+</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ER0KL3CQ2Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ER0KL3CQ2Q');
+</script>
+
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="https://slowfieldaudio.com/">slowfield audio</a>
+    <nav class="navlinks">
+      <a class="main-return" href="https://slowfieldaudio.com/">← main site</a>
+      <a href="/plugins.html">plugins</a>
+      <a href="mailto:hello@slowfieldaudio.com">feedback</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap plugins-return-row">
+  <a class="plugins-return" href="/plugins.html">← Return to Plugins</a>
+</div>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">character ageing effect · beta 0.5.3</div>
+      <h1>Patina</h1>
+      <div class="tagline">Time adds character.</div>
+      <p class="lede">Patina is a characterful audio effect for adding age, drift, digital wear and spacious atmosphere to instruments, vocals and found sound. Move from subtle warmth and remembered colour to unstable, faded and atmospheric textures without losing the identity of the source.</p>
+
+      <div class="actions">
+        <a class="btn primary" download href="/downloads/patina/Patina-0.5.3-macOS.pkg">↓ download Mac beta</a>
+        <a class="btn" download href="/downloads/patina/Patina-0.5.3-Windows-Setup.exe">↓ download Windows beta</a>
+        <a class="btn cream" href="/downloads/patina/Patina-User-Guide-Landscape.pdf">user guide</a>
+        <a class="btn dark" href="mailto:hello@slowfieldaudio.com?subject=Patina%20Beta%20Feedback">send feedback</a>
+      </div>
+
+      <div class="platform-row">
+        <span class="platform-badge"> macOS</span>
+        <span class="platform-badge">AU</span>
+        <span class="platform-badge">VST3</span>
+        <span class="platform-badge">Windows · 64-bit</span>
+        <span class="platform-badge">BETA</span>
+      </div>
+
+      <div class="bad-warnings">
+        <div class="warn beta"><strong>Public beta</strong>Patina 0.5.3 is available for testing. Please send repeatable bugs, host-specific issues and musical feedback to help shape the final release.</div>
+        <div class="warn mac"><strong>macOS beta warning</strong>This beta installer is not notarised yet. Gatekeeper may require you to approve the installer in System Settings before first launch.</div>
+        <div class="warn win"><strong>Windows beta warning</strong>The Windows beta installer is unsigned. Microsoft Defender SmartScreen may show an unknown-publisher warning.</div>
+      </div>
+    </div>
+
+    <div class="hero-art">
+      <img src="/downloads/patina/patina-interface.jpg?v=053" alt="Patina audio plugin interface">
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap band-grid">
+    <div class="band-card"><b>Ageing and wear</b><span>Add warmth, softness, worn edges and the accumulated character of time.</span></div>
+    <div class="band-card"><b>Pitch drift + flutter</b><span>Introduce subtle instability and motion without turning the source into a special effect.</span></div>
+    <div class="band-card"><b>Digital character</b><span>Add restrained lo-fi detail, dust and degradation for more fragile textures.</span></div>
+    <div class="band-card"><b>Delay + reverb</b><span>Place the aged signal into soft echoes, rooms and longer atmospheric spaces.</span></div>
+    <div class="band-card"><b>A/B comparison</b><span>Try a bolder treatment in the second bank and compare it instantly with the original idea.</span></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap layout">
+    <div>
+      <div class="eyebrow">The idea</div>
+      <h2>Make a sound feel remembered.</h2>
+      <div class="body">
+        <p>Patina is designed for sounds that need history rather than obvious destruction. Wear sets the amount of ageing, Age Time lets the treatment evolve, Instability adds drift and flutter, and Character changes the overall degree of fading.</p>
+        <p>Use Mix to preserve the source while letting Delay and Reverb extend the treatment into space. The result can stay nearly invisible or become a deliberately faded, unstable memory of the original signal.</p>
+      </div>
+      <div class="dual">
+        <div class="panel"><h3>Start subtle</h3><p>Low Wear and low Instability are often enough on piano, synths and vocals. Raise Mix only after the movement feels right.</p></div>
+        <div class="panel"><h3>Leave headroom</h3><p>Delay, Reverb and character processing can lift peaks. Use Output to keep the processed sound comfortably below clipping.</p></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Quick starting path</h3>
+      <p>1. Insert Patina after your instrument or audio track.</p>
+      <p>2. Choose a gentle factory preset.</p>
+      <p>3. Raise Wear and add a small amount of Instability.</p>
+      <p>4. Blend with Mix rather than processing at 100% by default.</p>
+      <p>5. Add Delay and Reverb only when the source needs depth.</p>
+      <p>6. Copy to B before making a more extreme version.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="eyebrow">Sound recipes</div>
+    <h2>Three easy places to begin.</h2>
+    <div class="recipe-grid">
+      <div class="recipe"><strong>Gentle Tape</strong><span>Low Wear · low Instability · medium Mix. Adds understated movement and softness.</span></div>
+      <div class="recipe"><strong>Faded Piano</strong><span>Medium Wear · slower Age Time · soft Reverb. Useful for nostalgic keys and sparse arrangements.</span></div>
+      <div class="recipe"><strong>Distant Pad</strong><span>Remembered character · more Reverb · gentle Delay. Pushes a pad backwards into the soundstage.</span></div>
+      <div class="recipe"><strong>Almost Forgotten</strong><span>Higher Wear · more Instability · lower Output. A more obvious aged and unstable treatment.</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="cta">
+    <div class="eyebrow" style="color:#e2cdb4">time adds character</div>
+    <h2>Download Patina and make a sound feel remembered.</h2>
+    <p>Patina 0.5.3 is currently a public beta for macOS and Windows. The landscape user guide is available above and includes quick-start ideas, control explanations and creative recipes.</p>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-brand">slowfield audio</div>
+    Slowfield Audio · Patina beta 0.5.3 · macOS + Windows · hello@slowfieldaudio.com
+  </div>
+</footer>
+
+<script>
+document.addEventListener('click', function(e){
+  const a=e.target && e.target.closest ? e.target.closest('a[href]') : null;
+  if(!a) return;
+  const href=a.href||'';
+  if(!/\.(pkg|exe|dmg|zip)(?:\?|$)/i.test(href)) return;
+  if(typeof window.gtag==='function'){
+    window.gtag('event','beta_download',{plugin_name:'Patina',link_url:href,page_path:location.pathname,transport_type:'beacon'});
+  }
+},true);
+</script>
+
+</body>
+</html>
