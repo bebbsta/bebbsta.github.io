@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Happenstance Beta — Slowfield Audio</title>
+<meta name="description" content="Happenstance by Slowfield Audio — an intelligent musical accident generator for live audio and loop remixing.">
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#efe2c5;color:#14292d}a{text-decoration:none;color:inherit}
+.wrap{max-width:1380px;margin:auto;padding:0 30px}header{position:sticky;top:0;z-index:20;background:rgba(239,226,197,.95);backdrop-filter:blur(16px);border-bottom:1px solid #173136}
+.nav{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:24px}.brand{font-size:17px;letter-spacing:.2em;text-transform:lowercase}.navlinks{display:flex;gap:28px;font-size:14px}
+.return-row{padding-top:24px}.return{display:inline-flex;padding:10px 18px;border:1px solid #173136;border-radius:999px;font-weight:650}
+.hero{padding:50px 0;background:linear-gradient(180deg,#f4e8cf,#e5d5b5)}.hero-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:38px;align-items:center}
+.eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:#b93e2b}
+h1{font-size:clamp(58px,7vw,104px);line-height:.9;font-weight:560;letter-spacing:-.045em;margin:20px 0 16px}h1 span{color:#d6422e}
+.tag{font-size:22px;letter-spacing:.07em;margin-bottom:22px}.lede{font-size:18px;line-height:1.68;max-width:660px;color:#41524f}
+.actions{display:flex;gap:13px;flex-wrap:wrap;margin-top:28px}.btn{padding:14px 20px;border-radius:13px;font-weight:780;border:1px solid #173136;background:#f4e8cf}.btn.primary{background:#d6422e;border-color:#d6422e;color:#fff}.btn.blue{background:#0b5d7b;border-color:#0b5d7b;color:#fff}
+.beta{margin-top:22px;border-radius:16px;padding:16px 18px;max-width:680px;background:#e5c77f;border:1px solid #9f7727}.beta strong{display:block;margin-bottom:4px}
+.compat{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;font-size:12px;color:#53635f}
+.hero-art{border-radius:28px;padding:14px;background:#12272b;border:1px solid #294348;box-shadow:0 18px 55px #0003}.hero-art img{display:block;width:100%;border-radius:20px}
+.feature-shell{padding:14px 0 0;background:#10272b}.features{border-radius:24px;display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden;background:#173136;color:#f6ead0;border:1px solid #33535a}
+.feature{padding:28px 24px;text-align:center;border-right:1px solid #33535a}.feature:last-child{border:0}.feature .symbol{font-size:30px;color:#e4a01c}.feature b{display:block;margin:10px 0 7px}.feature span{font-size:14px;line-height:1.5;color:#cad2ca}
+.section{padding:72px 0}.section.dark{background:#10272b;color:#f4e9d1}.section h2{font-size:45px;line-height:1.03;font-weight:560;margin:8px 0 28px}
+.product-block{display:grid;grid-template-columns:1.25fr .75fr;gap:34px;align-items:center}.screen{border-radius:22px;padding:12px;background:#071719}.screen img{width:100%;display:block;border-radius:13px}
+.copy{border-radius:22px;padding:30px;background:#f6ead0;border:1px solid #183136}.copy h3{font-size:36px;margin:0 0 14px}.copy p{line-height:1.68;color:#455755}
+.list{display:grid;gap:13px;margin-top:22px}.item{padding-top:14px;border-top:1px solid #b7aa8d}.item strong{display:block;margin-bottom:4px}.item span{font-size:14px;line-height:1.55;color:#52615e}
+.recipe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.recipe{padding:26px;border-radius:18px;background:#183136;border:1px solid #36545a}.recipe h3{color:#e59e1b}.recipe p{color:#cad2ca;line-height:1.6}
+.notice{margin-top:16px;padding:14px 16px;border-radius:14px;border:1px solid rgba(182,107,41,.45);background:rgba(182,107,41,.09);font-size:12px;line-height:1.55}
+footer{padding:30px 0 44px;background:#0d2024;color:#c9d0c9;border-top:1px solid #315057}.footer-logo{letter-spacing:.22em;text-transform:lowercase}
+@media(max-width:940px){.nav{flex-direction:column;align-items:flex-start;padding:14px 0}.hero-grid,.product-block{grid-template-columns:1fr}.features{grid-template-columns:1fr 1fr}.recipe-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="https://slowfieldaudio.com/">slowfield audio</a><nav class="navlinks"><a href="https://slowfieldaudio.com/">← main site</a><a href="/">plugins</a><a href="https://slowfieldaudio.com/#about">about</a></nav></div></header>
+<div class="wrap return-row"><a class="return" href="/">← Return to Plugins</a></div>
+<section class="hero"><div class="wrap hero-grid"><div>
+<div class="eyebrow">slowfield audio / beta 1.2.24</div><h1>Happen<span>stance</span></h1><div class="tag">listen. change. explore. keep. evolve.</div>
+<p class="lede">An intelligent musical accident generator that listens to live audio or an existing loop before it acts. Happenstance creates rhythm-aware transformations ranging from restrained rearrangements to ghosted, spacious and shimmering mutations.</p>
+<div class="beta"><strong>Beta software — macOS + Windows.</strong><span>Use it on copies of important sessions and send us repeatable host, timing, level or processing issues.</span></div>
+<div class="actions">
+<a class="btn primary" download href="/downloads/happenstance/Happenstance-1.2.24-macOS-Universal.pkg">↓ download Mac beta</a>
+<a class="btn blue" download href="/downloads/happenstance/Happenstance-1.2.24-Windows-x64-Setup.exe">↓ download Windows beta</a>
+<a class="btn" href="/happenstance_user_guide/">user guide</a>
+<a class="btn" href="mailto:hello@slowfieldaudio.com?subject=Happenstance%20Beta%20Feedback">send feedback</a>
+</div>
+<div class="compat"><strong>macOS + Windows</strong><span>|</span><strong>Mac: AU / VST3 · Windows: VST3 64-bit</strong><span>|</span>beta 1.2.24</div>
+<div class="notice"><strong>Beta installer notice.</strong> macOS Gatekeeper and Windows SmartScreen may show an unknown/unverified developer warning because these beta installers are unsigned. Download only from Slowfield Audio.</div>
+</div><div class="hero-art"><img src="/downloads/happenstance/happenstance-interface.jpg" alt="Happenstance plugin interface"></div></div></section>
+<section class="feature-shell"><div class="wrap"><div class="features">
+<div class="feature"><div class="symbol">◉</div><b>listen first</b><span>Phrase and transient analysis gives the engine musical context before processing.</span></div>
+<div class="feature"><div class="symbol">↯</div><b>make it happen</b><span>Generate a fresh processing recipe without stacking uncontrolled copies of the source.</span></div>
+<div class="feature"><div class="symbol">A–D</div><b>phrase memory</b><span>Capture, recall, replace and drag phrases back to the DAW.</span></div>
+<div class="feature"><div class="symbol">↔</div><b>safe / wild</b><span>Choose how adventurous the decision-making is, from conservative to disruptive.</span></div>
+</div></div></section>
+<section class="section"><div class="wrap"><div class="eyebrow">your first five minutes</div><h2>feed it a phrase. invite an accident.</h2>
+<div class="product-block"><div class="screen"><img src="/downloads/happenstance/happenstance-interface.jpg" alt="Happenstance controls"></div><div class="copy">
+<h3>A musical decision engine, not preset roulette.</h3><p>Start playback and let Happenstance hear enough material to understand the phrase. Set SAFE/WILD, then press MAKE IT HAPPEN. Use Again to ask for another interpretation, Keep to preserve one you like, and Undo when the accident went too far.</p>
+<div class="list">
+<div class="item"><strong>REARRANGE</strong><span>Rhythm-aware resequencing with smoothed boundaries.</span></div>
+<div class="item"><strong>GHOST</strong><span>Leaves rhythmic and spectral traces while opening space around the source.</span></div>
+<div class="item"><strong>NEGATIVE SPACE</strong><span>Creates intentional gaps and contrast rather than simply adding more sound.</span></div>
+<div class="item"><strong>CLOUD + SHIMMER</strong><span>Moves toward diffuse atmosphere and brighter, luminous transformations.</span></div>
+<div class="item"><strong>PHRASE MEMORIES A–D</strong><span>Capture useful phrases, recall them, replace them and drag WAV material back to your DAW.</span></div>
+</div></div></div></div></section>
+<section class="section dark"><div class="wrap"><div class="eyebrow">three ways in</div><h2>controlled unpredictability.</h2><div class="recipe-grid">
+<div class="recipe"><h3>SAFE</h3><p>Use a lower Wild value on drums or material where groove and transient definition must remain recognisable.</p></div>
+<div class="recipe"><h3>EXPLORE</h3><p>Move toward the centre, generate several accidents, then Keep the one whose rhythm or space suggests a new direction.</p></div>
+<div class="recipe"><h3>WILD</h3><p>Push toward the far end when the source is raw material rather than something you need to preserve.</p></div>
+</div></div></section>
+<footer><div class="wrap"><div class="footer-logo">slowfield audio</div><p>Happenstance beta 1.2.24 · macOS + Windows · hello@slowfieldaudio.com</p></div></footer>
+</body></html>
