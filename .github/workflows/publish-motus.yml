@@ -15,27 +15,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Import Motus page and interface assets
+      - name: Import Motus page
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p motus_beta_product_page downloads/motus
           curl -fL --retry 3 'https://raw.githubusercontent.com/bebbsta/slowfield-audio-site/main/motus_beta_product_page/index.html' -o motus_beta_product_page/index.html
-          curl -fL --retry 3 'https://raw.githubusercontent.com/bebbsta/Beta-plugins/main/ApprovedBackground.png' -o downloads/motus/motus-interface.png
-          curl -fL --retry 3 'https://raw.githubusercontent.com/bebbsta/Beta-plugins/main/SlowfieldLogo.png' -o downloads/motus/SlowfieldLogo.png
+          test -s downloads/motus/motus-interface.jpg
+          test -s assets/slowfield-audio-logo.png
           python3 - <<'PY'
           from pathlib import Path
           p=Path('motus_beta_product_page/index.html')
           s=p.read_text(encoding='utf-8')
-          s=s.replace('assets/slowfield-audio-logo.png','/downloads/motus/SlowfieldLogo.png')
-          for old in ('downloads/motus/motus-interface.jpg','downloads/motus/field.jpg','downloads/motus/macros.jpg','downloads/motus/engine.jpg','downloads/motus/tabs.jpg'):
-              s=s.replace(old,'/downloads/motus/motus-interface.png')
+          s=s.replace('assets/slowfield-audio-logo.png','/assets/slowfield-audio-logo.png')
+          for old in ('downloads/motus/motus-interface.jpg','downloads/motus/field.jpg','downloads/motus/macros.jpg','downloads/motus/engine.jpg','downloads/motus/tabs.jpg','downloads/motus/motus-interface.png'):
+              s=s.replace(old,'/downloads/motus/motus-interface.jpg')
           s=s.replace('href="downloads/motus/Motus-0.18.1-macOS.pkg"','href="/downloads/motus/Motus-0.18.1-macOS.pkg"')
           s=s.replace('href="downloads/motus/Motus-1.0.0-Windows-x64-Setup.exe"','href="/downloads/motus/Motus-1.0.0-Windows-x64-Setup.exe"')
           p.write_text(s,encoding='utf-8')
           PY
           test -s motus_beta_product_page/index.html
-          test -s downloads/motus/motus-interface.png
           grep -q 'Not another bank of LFOs' motus_beta_product_page/index.html
 
       - name: Add Motus card to catalogue
@@ -44,7 +43,7 @@ jobs:
           from pathlib import Path
           card = r'''
           <article class="card" id="motus-card">
-            <div class="media motus-media"><img src="/downloads/motus/motus-interface.png?v=1" alt="Motus generative movement processor interface"></div>
+            <div class="media motus-media"><img src="/downloads/motus/motus-interface.jpg?v=2" alt="Motus generative movement processor interface"></div>
             <div class="body">
               <div class="product-kicker">generative movement processor · beta</div>
               <h2>Motus</h2>
@@ -89,6 +88,6 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add motus_beta_product_page/index.html downloads/motus/motus-interface.png downloads/motus/SlowfieldLogo.png index.html plugins.html
+          git add motus_beta_product_page/index.html downloads/motus/motus-interface.jpg index.html plugins.html
           git commit -m 'Publish Motus product page and catalogue card' || exit 0
           git push
