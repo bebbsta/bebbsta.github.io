@@ -25,13 +25,13 @@ jobs:
           test -s assets/slowfield-audio-logo.png
           python3 - <<'PY'
           from pathlib import Path
+          import re
           p=Path('motus_beta_product_page/index.html')
           s=p.read_text(encoding='utf-8')
           s=s.replace('https://raw.githubusercontent.com/bebbsta/Beta-plugins/main/ApprovedBackground.png','/downloads/motus/motus-interface.jpg')
-          logo='https://raw.githubusercontent.com/bebbsta/bebbsta.github.io/main/assets/slowfield-audio-logo.png?v=4'
-          s=s.replace('https://raw.githubusercontent.com/bebbsta/Beta-plugins/main/SlowfieldLogo.png',logo)
-          s=s.replace('/assets/slowfield-audio-logo.png',logo)
-          s=s.replace('assets/slowfield-audio-logo.png',logo)
+          # Force both header/footer Slowfield logos to the verified local site asset.
+          s=re.sub(r'<img class="logo" src="[^"]*"', '<img class="logo" src="/assets/slowfield-audio-logo.png"', s)
+          s=re.sub(r'<img class="footer-logo" src="[^"]*"', '<img class="footer-logo" src="/assets/slowfield-audio-logo.png"', s)
           for old in ('downloads/motus/motus-interface.jpg','downloads/motus/field.jpg','downloads/motus/macros.jpg','downloads/motus/engine.jpg','downloads/motus/tabs.jpg','downloads/motus/motus-interface.png'):
               s=s.replace(old,'/downloads/motus/motus-interface.jpg')
           s=s.replace('//downloads/motus/motus-interface.jpg','/downloads/motus/motus-interface.jpg')
@@ -42,8 +42,9 @@ jobs:
           test -s motus_beta_product_page/index.html
           grep -q 'Not another bank of LFOs' motus_beta_product_page/index.html
           grep -q '/downloads/motus/motus-interface.jpg' motus_beta_product_page/index.html
-          grep -q 'raw.githubusercontent.com/bebbsta/bebbsta.github.io/main/assets/slowfield-audio-logo.png' motus_beta_product_page/index.html
+          test "$(grep -o 'src="/assets/slowfield-audio-logo.png"' motus_beta_product_page/index.html | wc -l | tr -d ' ')" = "2"
           ! grep -q 'ApprovedBackground.png' motus_beta_product_page/index.html
+          ! grep -q 'raw.githubusercontent.com.*slowfield-audio-logo' motus_beta_product_page/index.html
 
       - name: Add Motus card to catalogue
         shell: python
