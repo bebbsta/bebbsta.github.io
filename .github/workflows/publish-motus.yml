@@ -1,0 +1,94 @@
+name: Publish Motus product page and catalogue card
+
+on:
+  push:
+    paths:
+      - ".github/workflows/publish-motus.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Import Motus page and interface assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p motus_beta_product_page downloads/motus
+          curl -fL --retry 3 'https://raw.githubusercontent.com/bebbsta/slowfield-audio-site/main/motus_beta_product_page/index.html' -o motus_beta_product_page/index.html
+          curl -fL --retry 3 'https://raw.githubusercontent.com/bebbsta/Beta-plugins/main/ApprovedBackground.png' -o downloads/motus/motus-interface.png
+          curl -fL --retry 3 'https://raw.githubusercontent.com/bebbsta/Beta-plugins/main/SlowfieldLogo.png' -o downloads/motus/SlowfieldLogo.png
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('motus_beta_product_page/index.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('assets/slowfield-audio-logo.png','/downloads/motus/SlowfieldLogo.png')
+          for old in ('downloads/motus/motus-interface.jpg','downloads/motus/field.jpg','downloads/motus/macros.jpg','downloads/motus/engine.jpg','downloads/motus/tabs.jpg'):
+              s=s.replace(old,'/downloads/motus/motus-interface.png')
+          s=s.replace('href="downloads/motus/Motus-0.18.1-macOS.pkg"','href="/downloads/motus/Motus-0.18.1-macOS.pkg"')
+          s=s.replace('href="downloads/motus/Motus-1.0.0-Windows-x64-Setup.exe"','href="/downloads/motus/Motus-1.0.0-Windows-x64-Setup.exe"')
+          p.write_text(s,encoding='utf-8')
+          PY
+          test -s motus_beta_product_page/index.html
+          test -s downloads/motus/motus-interface.png
+          grep -q 'Not another bank of LFOs' motus_beta_product_page/index.html
+
+      - name: Add Motus card to catalogue
+        shell: python
+        run: |
+          from pathlib import Path
+          card = r'''
+          <article class="card" id="motus-card">
+            <div class="media motus-media"><img src="/downloads/motus/motus-interface.png?v=1" alt="Motus generative movement processor interface"></div>
+            <div class="body">
+              <div class="product-kicker">generative movement processor · beta</div>
+              <h2>Motus</h2>
+              <p>Turn modulation into behaviour. Motus creates connected, evolving movement across pitch, filter, amplitude, pan, width and space — from barely perceptible drift to unstable animated motion.</p>
+              <div class="meta"><span class="tag">macOS</span><span class="tag">Windows</span><span class="tag">AU / VST3</span><span class="tag">beta</span></div>
+              <div class="actions"><a class="btn motus" href="/motus_beta_product_page/">explore Motus</a></div>
+            </div>
+          </article>
+          '''.strip()
+          css = r'''<style id="motus-card-style">
+          .btn.motus{background:#b38a55!important;border-color:#b38a55!important;color:#15110c!important;box-shadow:0 7px 20px rgba(179,138,85,.22)}
+          .btn.motus:hover{filter:brightness(1.08);transform:translateY(-1px)}
+          .motus-media{background:#e8dcc4;min-height:260px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+          .motus-media img{width:100%;height:100%;object-fit:contain;display:block;padding:8px}
+          </style>'''
+          def replace_or_insert(text):
+              marker='<article class="card" id="motus-card">'
+              if marker in text:
+                  start=text.index(marker); end=text.index('</article>',start)+len('</article>')
+                  text=text[:start]+card+text[end:]
+              else:
+                  anchor='<article class="card" id="happenstance-card">'
+                  if anchor in text:
+                      start=text.index(anchor); end=text.index('</article>',start)+len('</article>')
+                      text=text[:end]+'\n'+card+text[end:]
+                  else:
+                      grid='</section>'
+                      pos=text.find(grid)
+                      if pos < 0: raise RuntimeError('No catalogue insertion point')
+                      text=text[:pos]+card+'\n'+text[pos:]
+              if 'id="motus-card-style"' not in text:
+                  text=text.replace('</head>',css+'\n</head>',1)
+              return text
+          for name in ('index.html','plugins.html'):
+              p=Path(name)
+              text=p.read_text(encoding='utf-8',errors='ignore')
+              p.write_text(replace_or_insert(text),encoding='utf-8')
+
+      - name: Commit Motus publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add motus_beta_product_page/index.html downloads/motus/motus-interface.png downloads/motus/SlowfieldLogo.png index.html plugins.html
+          git commit -m 'Publish Motus product page and catalogue card' || exit 0
+          git push
