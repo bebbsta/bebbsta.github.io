@@ -28,9 +28,10 @@ jobs:
           p=Path('motus_beta_product_page/index.html')
           s=p.read_text(encoding='utf-8')
           s=s.replace('https://raw.githubusercontent.com/bebbsta/Beta-plugins/main/ApprovedBackground.png','/downloads/motus/motus-interface.jpg')
-          s=s.replace('https://raw.githubusercontent.com/bebbsta/Beta-plugins/main/SlowfieldLogo.png','/assets/slowfield-audio-logo.png')
-          s=s.replace('assets/slowfield-audio-logo.png','/assets/slowfield-audio-logo.png')
-          s=s.replace('//assets/slowfield-audio-logo.png','/assets/slowfield-audio-logo.png')
+          logo='https://raw.githubusercontent.com/bebbsta/bebbsta.github.io/main/assets/slowfield-audio-logo.png?v=4'
+          s=s.replace('https://raw.githubusercontent.com/bebbsta/Beta-plugins/main/SlowfieldLogo.png',logo)
+          s=s.replace('/assets/slowfield-audio-logo.png',logo)
+          s=s.replace('assets/slowfield-audio-logo.png',logo)
           for old in ('downloads/motus/motus-interface.jpg','downloads/motus/field.jpg','downloads/motus/macros.jpg','downloads/motus/engine.jpg','downloads/motus/tabs.jpg','downloads/motus/motus-interface.png'):
               s=s.replace(old,'/downloads/motus/motus-interface.jpg')
           s=s.replace('//downloads/motus/motus-interface.jpg','/downloads/motus/motus-interface.jpg')
@@ -41,6 +42,7 @@ jobs:
           test -s motus_beta_product_page/index.html
           grep -q 'Not another bank of LFOs' motus_beta_product_page/index.html
           grep -q '/downloads/motus/motus-interface.jpg' motus_beta_product_page/index.html
+          grep -q 'raw.githubusercontent.com/bebbsta/bebbsta.github.io/main/assets/slowfield-audio-logo.png' motus_beta_product_page/index.html
           ! grep -q 'ApprovedBackground.png' motus_beta_product_page/index.html
 
       - name: Add Motus card to catalogue
@@ -93,6 +95,6 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add motus_beta_product_page/index.html downloads/motus/motus-interface.jpg index.html plugins.html
+          git add motus_beta_product_page/index.html index.html plugins.html
           git commit -m 'Publish Motus product page and catalogue card' || exit 0
           git push
