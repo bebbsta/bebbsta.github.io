@@ -27,15 +27,21 @@ jobs:
           from pathlib import Path
           p=Path('motus_beta_product_page/index.html')
           s=p.read_text(encoding='utf-8')
+          s=s.replace('https://raw.githubusercontent.com/bebbsta/Beta-plugins/main/ApprovedBackground.png','/downloads/motus/motus-interface.jpg')
+          s=s.replace('https://raw.githubusercontent.com/bebbsta/Beta-plugins/main/SlowfieldLogo.png','/assets/slowfield-audio-logo.png')
           s=s.replace('assets/slowfield-audio-logo.png','/assets/slowfield-audio-logo.png')
+          s=s.replace('//assets/slowfield-audio-logo.png','/assets/slowfield-audio-logo.png')
           for old in ('downloads/motus/motus-interface.jpg','downloads/motus/field.jpg','downloads/motus/macros.jpg','downloads/motus/engine.jpg','downloads/motus/tabs.jpg','downloads/motus/motus-interface.png'):
               s=s.replace(old,'/downloads/motus/motus-interface.jpg')
+          s=s.replace('//downloads/motus/motus-interface.jpg','/downloads/motus/motus-interface.jpg')
           s=s.replace('href="downloads/motus/Motus-0.18.1-macOS.pkg"','href="/downloads/motus/Motus-0.18.1-macOS.pkg"')
           s=s.replace('href="downloads/motus/Motus-1.0.0-Windows-x64-Setup.exe"','href="/downloads/motus/Motus-1.0.0-Windows-x64-Setup.exe"')
           p.write_text(s,encoding='utf-8')
           PY
           test -s motus_beta_product_page/index.html
           grep -q 'Not another bank of LFOs' motus_beta_product_page/index.html
+          grep -q '/downloads/motus/motus-interface.jpg' motus_beta_product_page/index.html
+          ! grep -q 'ApprovedBackground.png' motus_beta_product_page/index.html
 
       - name: Add Motus card to catalogue
         shell: python
@@ -43,7 +49,7 @@ jobs:
           from pathlib import Path
           card = r'''
           <article class="card" id="motus-card">
-            <div class="media motus-media"><img src="/downloads/motus/motus-interface.jpg?v=2" alt="Motus generative movement processor interface"></div>
+            <div class="media motus-media"><img src="/downloads/motus/motus-interface.jpg?v=3" alt="Motus generative movement processor interface"></div>
             <div class="body">
               <div class="product-kicker">generative movement processor · beta</div>
               <h2>Motus</h2>
@@ -70,8 +76,7 @@ jobs:
                       start=text.index(anchor); end=text.index('</article>',start)+len('</article>')
                       text=text[:end]+'\n'+card+text[end:]
                   else:
-                      grid='</section>'
-                      pos=text.find(grid)
+                      pos=text.find('</section>')
                       if pos < 0: raise RuntimeError('No catalogue insertion point')
                       text=text[:pos]+card+'\n'+text[pos:]
               if 'id="motus-card-style"' not in text:
