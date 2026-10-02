@@ -12,8 +12,6 @@ dst_assets = root / "downloads" / "syndrone"
 dst_assets.mkdir(parents=True, exist_ok=True)
 for p in src_assets.iterdir():
     if p.is_file():
-        # The public Syndrone interface is uploaded directly to downloads/syndrone.
-        # Do not overwrite it with the legacy release-assets copy during rebuilds.
         if p.name == "syndrone-interface.jpg" and (dst_assets / p.name).exists():
             continue
         (dst_assets / p.name).write_bytes(p.read_bytes())
@@ -24,7 +22,8 @@ for page_name in ("plugins.html", "index.html"):
         continue
     text = p.read_text(encoding="utf-8", errors="ignore")
     opening = '<div class="wrap products">'
-    card = r'''
+
+    syndrone_card = r'''
     <article class="card" id="syndrone-card">
       <div class="media syndrone-media"><img src="/downloads/syndrone/syndrone-interface.jpg?v=105" alt="Syndrone plugin interface"></div>
       <div class="body">
@@ -41,28 +40,54 @@ for page_name in ("plugins.html", "index.html"):
       </div>
     </article>
 '''
-    if 'id="syndrone-card"' in text:
-        start=text.find('<article class="card" id="syndrone-card">')
-        end=text.find('</article>',start)
-        if end!=-1:
-            end += len('</article>')
-            text=text[:start]+card.strip()+text[end:]
-    elif opening in text:
-        text=text.replace(opening, opening+"\n"+card, 1)
+    motus_card = r'''
+    <article class="card" id="motus-card">
+      <div class="media motus-media"><img src="/downloads/motus/motus-interface.png?v=motus1" alt="Motus plugin interface"></div>
+      <div class="body">
+        <div class="product-kicker">generative movement processor · beta</div>
+        <h2>Motus</h2>
+        <p>Turn modulation into behaviour. Motus creates organic evolving motion across pitch, filter, amplitude, pan, width and space, with deeper Character, Memory, Evolution, Interact, 3-D Field and Behaviour systems.</p>
+        <div class="meta"><span class="tag">macOS</span><span class="tag">Windows</span><span class="tag">AU / VST3</span><span class="tag">beta</span></div>
+        <div class="actions">
+          <a class="btn motus" href="/motus_beta_product_page/">explore Motus</a>
+        </div>
+      </div>
+    </article>
+'''
+
+    for card_id, card in (("syndrone-card", syndrone_card), ("motus-card", motus_card)):
+        marker = f'id="{card_id}"'
+        article_start = f'<article class="card" id="{card_id}">'
+        if marker in text:
+            start = text.find(article_start)
+            end = text.find('</article>', start)
+            if end != -1:
+                end += len('</article>')
+                text = text[:start] + card.strip() + text[end:]
+        elif opening in text:
+            text = text.replace(opening, opening + "\n" + card, 1)
 
     css=r'''
-<style id="syndrone-card-style">
+<style id="slowfield-feature-card-style">
 .btn.syndrone{background:#c89f5f !important;border-color:#c89f5f !important;color:#122028 !important;box-shadow:0 7px 20px rgba(147,104,42,.22)}
 .btn.syndrone:hover{filter:brightness(1.08);transform:translateY(-1px)}
 .syndrone-media{background:#10242b;min-height:260px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .syndrone-media img{width:auto;max-width:540px;height:auto;max-height:100%;object-fit:contain;padding:10px;display:block}
+.btn.motus{background:#9a6a32 !important;border-color:#9a6a32 !important;color:#fff8e9 !important;box-shadow:0 7px 20px rgba(105,73,35,.24)}
+.btn.motus:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.motus-media{background:#2e291f;min-height:260px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.motus-media img{width:100%;height:100%;min-height:260px;object-fit:contain;padding:8px;display:block}
 </style>
 '''
-    if 'id="syndrone-card-style"' not in text and '</head>' in text:
+    old_style_start = text.find('<style id="syndrone-card-style">')
+    if old_style_start != -1:
+        old_style_end = text.find('</style>', old_style_start)
+        if old_style_end != -1:
+            old_style_end += len('</style>')
+            text = text[:old_style_start] + css.strip() + text[old_style_end:]
+    elif 'id="slowfield-feature-card-style"' not in text and '</head>' in text:
         text=text.replace('</head>',css+'\n</head>',1)
     p.write_text(text,encoding="utf-8")
 
 (root / "CNAME").write_text("plugins.slowfieldaudio.com\n", encoding="utf-8")
 (root / ".nojekyll").touch()
-
-# Syndrone catalogue deployment trigger
